@@ -71,6 +71,7 @@ private:
     
     // Callback функция
     std::function<void()> m_onClick;
+    // void(*)() m_onClick;
     
     // Вспомогательные методы
     void updateColor();

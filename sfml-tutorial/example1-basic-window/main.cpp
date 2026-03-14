@@ -27,7 +27,7 @@ int main()
             if (event->is<sf::Event::Closed>())
             {
                 std::cout << "Событие закрытия окна получено." << std::endl;
-                // window.close();
+                window.close();
             }
             
             // Обработка нажатия клавиши ESC

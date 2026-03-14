@@ -53,7 +53,7 @@ int main()
     float maxHeight = 400.0f; // Максимальная высота спрайта на экране
     float scaleX = maxWidth / textureSize.x;
     float scaleY = maxHeight / textureSize.y;
-    float initialScale = std::min({scaleX, scaleY, 2.0f}); // Не больше 2x, но не больше чем нужно
+    float initialScale = std::min({1.0f, 1.0f, 2.0f}); // Не больше 2x, но не больше чем нужно
     
     sprite.setScale(sf::Vector2f(initialScale, initialScale));
     
@@ -83,7 +83,7 @@ int main()
     
     std::cout << "Управление:" << std::endl;
     std::cout << "  Стрелки - перемещение спрайта" << std::endl;
-    std::cout << "  R - поворот" << std::endl;
+    // std::cout << "  R - поворот" << std::endl;
     std::cout << "  +/- - масштабирование" << std::endl;
     std::cout << "  ESC - выход" << std::endl;
     
@@ -153,7 +153,7 @@ int main()
         float pulseScale = 2.0f + 0.3f * std::sin(time);
         // Можно раскомментировать для автоматической пульсации:
         // SFML 3.0: setScale принимает Vector2f
-        // sprite.setScale(sf::Vector2f(pulseScale, pulseScale));
+        sprite.setScale(sf::Vector2f(pulseScale, pulseScale));
         
         // Очистка экрана
         window.clear(sf::Color(30, 30, 50));
