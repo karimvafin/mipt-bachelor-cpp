@@ -12,7 +12,11 @@
 // Пример: sum({}) == 0
 // -----------------------------------------------------------------------------
 int sum(const std::vector<int>& v) {
-    throw std::runtime_error("Not implemented");
+    int result = 0;
+    for (int i = 0; i < v.size(); ++i){
+        result += v[i];
+    }
+    return result;
 }
 
 // -----------------------------------------------------------------------------
@@ -23,7 +27,7 @@ int sum(const std::vector<int>& v) {
 // Пример: filter_even({1, 3, 5}) == {}
 // -----------------------------------------------------------------------------
 std::vector<int> filter_even(const std::vector<int>& v) {
-    throw std::runtime_error("Not implemented");
+    
 }
 
 // -----------------------------------------------------------------------------
