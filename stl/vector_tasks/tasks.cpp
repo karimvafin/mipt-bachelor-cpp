@@ -12,7 +12,11 @@
 // Пример: sum({}) == 0
 // -----------------------------------------------------------------------------
 int sum(const std::vector<int>& v) {
-    throw std::runtime_error("Not implemented");
+    int result=0;
+    for (int i=0;  i<v.size();i++){
+        result+=v[i];
+    }
+    return result;
 }
 
 // -----------------------------------------------------------------------------
@@ -23,7 +27,18 @@ int sum(const std::vector<int>& v) {
 // Пример: filter_even({1, 3, 5}) == {}
 // -----------------------------------------------------------------------------
 std::vector<int> filter_even(const std::vector<int>& v) {
-    throw std::runtime_error("Not implemented");
+    std::vector <int> result;
+    for (int i=0;  i<v.size();i++){
+      if  (v[i]%2==0){
+        result.push_back(v[i]);
+
+      }
+
+    }
+    return result;
+
+
+    
 }
 
 // -----------------------------------------------------------------------------
@@ -35,7 +50,12 @@ std::vector<int> filter_even(const std::vector<int>& v) {
 // Пример: v = {1, 2, 3},        k = 0  ->  v = {1, 2, 3}
 // -----------------------------------------------------------------------------
 void rotate_left(std::vector<int>& v, std::size_t k) {
-    throw std::runtime_error("Not implemented");
+    for (int t=0; t=к%v.size(); t++){
+        v.push_back(v.begin());
+        v.erase(0);
+    }
+
+
 }
 
 // -----------------------------------------------------------------------------
