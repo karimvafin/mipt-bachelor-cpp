@@ -47,11 +47,12 @@ std::vector<int> filter_even(const std::vector<int>& v) {
 // -----------------------------------------------------------------------------
 void rotate_left(std::vector<int>& v, std::size_t k) {
     std::vector<int> v2(v.size(), 0);
-    for (auto i = v.begin(); i != v.end(); ++i) {
-        int n = (*i + k) % v.size();
-        v2.insert(v2.begin() + n, *i);
+    int sch = 0;
+    for (auto i = v.begin(); i != v.end(); ++i, ++sch) {
+        int n = (sch + v.size() - k % v.size()) % v.size();
+        v2[n] = *i;
     }
-    return v2;
+    v = v2;
 }
 
 // -----------------------------------------------------------------------------
