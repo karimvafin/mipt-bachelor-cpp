@@ -13,7 +13,11 @@
 // Пример: sum({}) == 0
 // -----------------------------------------------------------------------------
 int sum(const std::vector<int>& v) {
-    throw std::runtime_error("Not implemented");
+    int sum = 0;
+    for (auto it = v.begin();it!=v.end(); ++it){
+        sum+=*it;
+    }
+    return sum;
 }
 
 // -----------------------------------------------------------------------------
@@ -24,7 +28,12 @@ int sum(const std::vector<int>& v) {
 // Пример: filter_even({1, 3, 5}) == {}
 // -----------------------------------------------------------------------------
 std::vector<int> filter_even(const std::vector<int>& v) {
-    throw std::runtime_error("Not implemented");
+    std::vector<int> v2;
+    for (auto it = v.begin();it!=v.end(); ++it){
+        if ((*it)%2==0){
+            v2.push_back(*it);
+        };
+    }; return v2;
 }
 
 // -----------------------------------------------------------------------------
@@ -36,7 +45,15 @@ std::vector<int> filter_even(const std::vector<int>& v) {
 // Пример: v = {1, 2, 3},        k = 0  ->  v = {1, 2, 3}
 // -----------------------------------------------------------------------------
 void rotate_left(std::vector<int>& v, std::size_t k) {
-    throw std::runtime_error("Not implemented");
+    if (v.size()==0 || v.size() == 1){
+        return;
+    }
+
+    for (size_t i=0; i<k%(v.size()); ++i){
+        v.push_back(*v.begin());
+        v.erase(v.begin());
+    };
+    
 }
 
 // -----------------------------------------------------------------------------
@@ -58,7 +75,12 @@ std::vector<int> remove_duplicates(const std::vector<int>& v) {
 // Пример: flatten({}) == {}
 // -----------------------------------------------------------------------------
 std::vector<int> flatten(const std::vector<std::vector<int>>& matrix) {
-    throw std::runtime_error("Not implemented");
+    std::vector<int> v2;
+    for (auto it=matrix.begin(); it!=matrix.end(); ++it ){
+        for (auto jt=(*it).begin(); jt!=(*it).end(); ++jt ){
+            v2.push_back(*jt);
+        };
+    }; return v2;
 }
 
 // -----------------------------------------------------------------------------
