@@ -50,12 +50,14 @@ std::vector<int> filter_even(const std::vector<int>& v) {
 // Пример: v = {1, 2, 3},        k = 0  ->  v = {1, 2, 3}
 // -----------------------------------------------------------------------------
 void rotate_left(std::vector<int>& v, std::size_t k) {
-    for (int t=0; t=к%v.size(); t++){
-        v.push_back(v.begin());
-        v.erase(0);
+     if (v.empty()) return;
+
+    k = k % v.size();
+
+    for (std::size_t t = 0; t < k; t++) {
+        v.push_back(v[0]);
+        v.erase(v.begin());
     }
-
-
 }
 
 // -----------------------------------------------------------------------------
@@ -66,7 +68,15 @@ void rotate_left(std::vector<int>& v, std::size_t k) {
 // Пример: remove_duplicates({}) == {}
 // -----------------------------------------------------------------------------
 std::vector<int> remove_duplicates(const std::vector<int>& v) {
-    throw std::runtime_error("Not implemented");
+    std::vector<int> res;
+
+    for (int i=0; i<v.size(); i++) {
+        if (std::find(res.begin(), res.end(), v[i]) == res.end()) {
+            res.push_back(v[i]);
+        }
+    }
+
+    return res;
 }
 
 // -----------------------------------------------------------------------------
@@ -77,7 +87,14 @@ std::vector<int> remove_duplicates(const std::vector<int>& v) {
 // Пример: flatten({}) == {}
 // -----------------------------------------------------------------------------
 std::vector<int> flatten(const std::vector<std::vector<int>>& matrix) {
-    throw std::runtime_error("Not implemented");
+    std::vector<int> res;
+    for (int i=0; i<matrix.size(); i++) {
+        for (int j=0; j<matrix[i].size(); j++) {
+            res.push_back(matrix[i][j]);
+      }
+
+   }
+   return res;
 }
 
 // -----------------------------------------------------------------------------
@@ -88,7 +105,29 @@ std::vector<int> flatten(const std::vector<std::vector<int>>& matrix) {
 // Пример: merge_sorted({}, {1, 2}) == {1, 2}
 // -----------------------------------------------------------------------------
 std::vector<int> merge_sorted(const std::vector<int>& a, const std::vector<int>& b) {
-    throw std::runtime_error("Not implemented");
+    std::vector<int> res;
+     int i = 0, j = 0;
+
+    while (i < a.size() && j < b.size()) {
+        if (a[i] < b[j]) {
+            res.push_back(a[i]);
+            i++;
+        } else {
+            res.push_back(b[j]);
+            j++;
+        }
+    }
+
+    
+    while (i < a.size()) {
+        res.push_back(a[i++]);
+    }
+
+    while (j < b.size()) {
+        res.push_back(b[j++]);
+    }
+
+    return res;
 }
 
 // -----------------------------------------------------------------------------
@@ -101,7 +140,18 @@ std::vector<int> merge_sorted(const std::vector<int>& a, const std::vector<int>&
 // Пример: max_subarray_sum({-3, -1, -2}) == -1
 // -----------------------------------------------------------------------------
 int max_subarray_sum(const std::vector<int>& v) {
-    throw std::runtime_error("Not implemented");
+    if (v.empty()) {
+        throw std::invalid_argument("Vector is empty");
+    }
+    int max_sum=v[0];
+    int current_sum=v[0];
+    for (int i=1; i<v.size(); i++){
+        current_sum=std::max(v[i], current_sum+v[i]);
+        max_sum=std::max(max_sum, current_sum);
+
+    }
+    return max_sum;
+
 }
 
 // -----------------------------------------------------------------------------
@@ -114,5 +164,17 @@ int max_subarray_sum(const std::vector<int>& v) {
 //      == {{0, 3, 6}, {1, 4}, {2, 5}}
 // -----------------------------------------------------------------------------
 std::vector<std::vector<int>> group_by_remainder(const std::vector<int>& v, int k) {
-    throw std::runtime_error("Not implemented");
+     if (k<=0) {
+        throw std::invalid_argument("k<=0");
+    }
+    std::vector<std::vector<int>> result (k);
+    int r=0;
+    for (int i=0; i<v.size(); i++){
+        r=(v[i] % k + k) % k;
+        result[r].push_back(v[i]);
+
+
+    }
+    return result;
+
 }
