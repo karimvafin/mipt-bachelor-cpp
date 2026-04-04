@@ -64,7 +64,21 @@ void rotate_left(std::vector<int>& v, std::size_t k) {
 // Пример: remove_duplicates({}) == {}
 // -----------------------------------------------------------------------------
 std::vector<int> remove_duplicates(const std::vector<int>& v) {
-    throw std::runtime_error("Not implemented");
+    if (v.size() == 0||v.size() == 1){
+        return v;
+    }
+    std::vector<int> v2;
+    v2.push_back(v[0]);
+    for (auto it = v.begin()+1; it!=v.end(); ++it){
+        bool flag = true;
+        for (auto jt = v2.begin(); jt!=v2.end(); ++jt){
+            if (*jt == *it){flag = false;}
+        }
+        if (flag){
+            v2.push_back(*it);
+        }
+        
+    } return v2;
 }
 
 // -----------------------------------------------------------------------------
