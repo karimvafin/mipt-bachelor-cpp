@@ -107,18 +107,28 @@ std::vector<int> flatten(const std::vector<std::vector<int>>& matrix) {
 // Пример: merge_sorted({}, {1, 2}) == {1, 2}
 // -----------------------------------------------------------------------------
 std::vector<int> merge_sorted(const std::vector<int>& a, const std::vector<int>& b) {
-    std::vector<int> not_filtered = a;
-    for(size_t i = 0 ; i<b.size(); i++){
-        not_filtered.push_back(b[i]);
-    }
-
-
-    for(size_t i = 0; i < not_filtered.size(); i++){
-        for(size_t j = 0; j < not_filtered.size() - 1 - i; j++){
-            if(not_filtered[j] > not_filtered[j+1]){
-                std::swap(not_filtered[j], not_filtered[j+1]);
-            }
+    std::vector<int> not_filtered;
+    not_filtered.reserve(a.size() + b.size());
+    
+    size_t i = 0, j = 0;
+    
+    while(i < a.size() && j < b.size()) {
+        if(a[i] <= b[j]) {
+            not_filtered.push_back(a[i]);
+            i++;
         }
+        else {
+            not_filtered.push_back(b[j]);
+            j++;
+        }
+    }
+    
+    for(size_t k = i; k < a.size(); k++) {
+        not_filtered.push_back(a[k]);
+    }
+    
+    for(size_t k = j; k < b.size(); k++) {
+        not_filtered.push_back(b[k]);
     }
     
     return not_filtered;
