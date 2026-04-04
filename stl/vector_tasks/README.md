@@ -15,7 +15,7 @@ vector_tasks/
 ## Сборка и запуск
 
 ```bash
-cmake -S . -B build
+cmake -G "MinGW Makefiles" -S . -B build
 cmake --build build
 ./build/vector_tests
 ```

@@ -29,7 +29,7 @@ int sum=0;
 // Пример: filter_even({1, 2, 3, 4, 5, 6}) == {2, 4, 6}
 // Пример: filter_even({1, 3, 5}) == {}
 // -----------------------------------------------------------------------------
-std::vector<int> filter_even( std::vector<int>& v) {
+std::vector<int> filter_even(const std::vector<int>& v) {
     std::vector<int> filtered;
     for(size_t i = 0 ; i<v.size(); i++){
         if(v[i]%2==0)
