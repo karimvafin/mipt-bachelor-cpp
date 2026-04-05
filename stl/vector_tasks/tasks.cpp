@@ -105,7 +105,29 @@ std::vector<int> flatten(const std::vector<std::vector<int>>& matrix) {
 // Пример: merge_sorted({}, {1, 2}) == {1, 2}
 // -----------------------------------------------------------------------------
 std::vector<int> merge_sorted(const std::vector<int>& a, const std::vector<int>& b) {
-    throw std::runtime_error("Not implemented");
+    if (a.size() == 0) return b;
+    if (b.size() == 0) return a;
+    std::vector<int> v2;
+    size_t i = 0;
+    size_t j = 0;
+    while (i<a.size() && j<b.size()){
+        if (a[i]<=b[j]){
+            v2.push_back(a[i]);
+            i+=1;
+        }
+        else{
+            v2.push_back(b[j]);
+            j+=1;
+        };
+    }
+    while (i<a.size()){
+        v2.push_back(a[i]);
+        i+=1;
+    };
+    while (j<b.size()){
+        v2.push_back(b[j]);
+        j+=1;
+    }; return v2;
 }
 
 // -----------------------------------------------------------------------------
@@ -118,7 +140,15 @@ std::vector<int> merge_sorted(const std::vector<int>& a, const std::vector<int>&
 // Пример: max_subarray_sum({-3, -1, -2}) == -1
 // -----------------------------------------------------------------------------
 int max_subarray_sum(const std::vector<int>& v) {
-    throw std::runtime_error("Not implemented");
+    if (v.size()==0) {
+        throw std::invalid_argument("size = 0");
+    }
+    int now = v[0];  
+    int res = v[0];
+    for (size_t i=1; i<v.size(); ++i) {
+        now = std::max(v[i], now+v[i]);
+        res = std::max(res,now);
+    }; return res;
 }
 
 // -----------------------------------------------------------------------------
@@ -130,6 +160,13 @@ int max_subarray_sum(const std::vector<int>& v) {
 // Пример: group_by_remainder({0, 1, 2, 3, 4, 5, 6}, 3)
 //      == {{0, 3, 6}, {1, 4}, {2, 5}}
 // -----------------------------------------------------------------------------
-std::vector<std::vector<int>> group_by_remainder(const std::vector<int>& v, int k) {
-    throw std::runtime_error("Not implemented");
+std::vector<std::vector<int>> group_by_remainder(const std::vector<int>& v, int k){
+     if (k <= 0) {
+        throw std::invalid_argument("k<=0");
+    };
+    std::vector<std::vector<int>> v2(k);
+    for (int i : v) {
+        int ost = ((i%k)+k)%k;
+        v2[ost].push_back(i);
+    } return v2;
 }
