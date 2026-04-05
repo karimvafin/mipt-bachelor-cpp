@@ -13,7 +13,9 @@
 // Пример: sum({}) == 0
 // -----------------------------------------------------------------------------
 int sum(const std::vector<int>& v) {
-    throw std::runtime_error("Not implemented");
+    int sum = 0;
+    for (int i : v) sum += i;
+    return sum;
 }
 
 // -----------------------------------------------------------------------------
@@ -24,7 +26,11 @@ int sum(const std::vector<int>& v) {
 // Пример: filter_even({1, 3, 5}) == {}
 // -----------------------------------------------------------------------------
 std::vector<int> filter_even(const std::vector<int>& v) {
-    throw std::runtime_error("Not implemented");
+    std::vector<int> v_filtered;
+    for (auto i : v) {
+        if (i % 2 == 0) v_filtered.push_back(i);
+    }
+    return v_filtered;
 }
 
 // -----------------------------------------------------------------------------
@@ -36,7 +42,12 @@ std::vector<int> filter_even(const std::vector<int>& v) {
 // Пример: v = {1, 2, 3},        k = 0  ->  v = {1, 2, 3}
 // -----------------------------------------------------------------------------
 void rotate_left(std::vector<int>& v, std::size_t k) {
-    throw std::runtime_error("Not implemented");
+    if (v.size() == 0) return; 
+    k = k % v.size();
+    std::vector<int> v_rotated;
+    for (std::size_t i = k; i < v.size(); i++) v_rotated.push_back(v[i]);
+    for (std::size_t i = 0; i < k; i++) v_rotated.push_back(v[i]);
+    v = v_rotated;
 }
 
 // -----------------------------------------------------------------------------
@@ -47,7 +58,15 @@ void rotate_left(std::vector<int>& v, std::size_t k) {
 // Пример: remove_duplicates({}) == {}
 // -----------------------------------------------------------------------------
 std::vector<int> remove_duplicates(const std::vector<int>& v) {
-    throw std::runtime_error("Not implemented");
+    std::vector<int> v_cleared;
+    for (auto i : v) {
+        bool found = false;
+        for (auto j : v_cleared) {
+            if (i == j) found = true;
+        }
+        if (!found) v_cleared.push_back(i);
+    }
+    return v_cleared;
 }
 
 // -----------------------------------------------------------------------------
@@ -58,7 +77,11 @@ std::vector<int> remove_duplicates(const std::vector<int>& v) {
 // Пример: flatten({}) == {}
 // -----------------------------------------------------------------------------
 std::vector<int> flatten(const std::vector<std::vector<int>>& matrix) {
-    throw std::runtime_error("Not implemented");
+    std::vector<int> v_flatten;
+    for (auto string : matrix) {
+        for (auto i : string) v_flatten.push_back(i);
+    }
+    return v_flatten;
 }
 
 // -----------------------------------------------------------------------------
@@ -69,7 +92,30 @@ std::vector<int> flatten(const std::vector<std::vector<int>>& matrix) {
 // Пример: merge_sorted({}, {1, 2}) == {1, 2}
 // -----------------------------------------------------------------------------
 std::vector<int> merge_sorted(const std::vector<int>& a, const std::vector<int>& b) {
-    throw std::runtime_error("Not implemented");
+    int i = 0, j = 0;
+    std::vector<int> v_merged;
+    
+    while (i < a.size() && j < b.size()) {
+        if (a[i] <= b[j]) {
+            v_merged.push_back(a[i]);
+            i++;
+        }
+        else {
+            v_merged.push_back(b[j]);
+            j++;
+        }
+    }
+
+    while (i < a.size()) {
+        v_merged.push_back(a[i]);
+        i++;
+    }
+
+    while (j < b.size()) {
+        v_merged.push_back(b[j]);
+        j++;
+    }
+    return v_merged;
 }
 
 // -----------------------------------------------------------------------------
@@ -82,7 +128,20 @@ std::vector<int> merge_sorted(const std::vector<int>& a, const std::vector<int>&
 // Пример: max_subarray_sum({-3, -1, -2}) == -1
 // -----------------------------------------------------------------------------
 int max_subarray_sum(const std::vector<int>& v) {
-    throw std::runtime_error("Not implemented");
+    if (v.empty()) throw std::invalid_argument("Vector is empty!");
+    int sum = 0, max_sum = 0;
+    for (auto i : v) {
+        sum += i;
+        if (sum < 0) sum = 0;
+        else if (max_sum < sum) max_sum = sum;
+    }
+    if (max_sum == 0) {
+        max_sum = v[0];
+        for (auto i : v) {
+            if (i > max_sum) max_sum = i;
+        }
+    }
+    return max_sum;
 }
 
 // -----------------------------------------------------------------------------
@@ -95,5 +154,17 @@ int max_subarray_sum(const std::vector<int>& v) {
 //      == {{0, 3, 6}, {1, 4}, {2, 5}}
 // -----------------------------------------------------------------------------
 std::vector<std::vector<int>> group_by_remainder(const std::vector<int>& v, int k) {
-    throw std::runtime_error("Not implemented");
+    if (k <= 0) throw std::invalid_argument("k <= 0");
+    
+    std::vector<std::vector<int>> v_grouped;
+    for (int i = 0; i < k; i++) {
+        std::vector<int> a;
+        v_grouped.push_back(a);
+    }
+
+    for (auto i : v) {
+        v_grouped[(i % k + k) % k].push_back(i);
+    }
+
+    return v_grouped;
 }
