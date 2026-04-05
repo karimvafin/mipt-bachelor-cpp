@@ -13,7 +13,13 @@
 // Пример: sum({}) == 0
 // -----------------------------------------------------------------------------
 int sum(const std::vector<int>& v) {
-    throw std::runtime_error("Not implemented");
+int result = 0;
+for (int num : v) {
+    result += num;
+}
+return result;   
+
+
 }
 
 // -----------------------------------------------------------------------------
@@ -24,9 +30,17 @@ int sum(const std::vector<int>& v) {
 // Пример: filter_even({1, 3, 5}) == {}
 // -----------------------------------------------------------------------------
 std::vector<int> filter_even(const std::vector<int>& v) {
-    throw std::runtime_error("Not implemented");
-}
+    std::vector<int> even;
+    int j = 0;
+    even.reserve(v.size());
 
+    for(int i = 0; i < v.size(); i++) {
+        if (v[i] % 2 == 0) {
+            even.push_back(v[i]);
+        }
+    }
+    return even;
+}
 // -----------------------------------------------------------------------------
 // Задание 3: rotate_left (0.25 баллов)
 // Выполните циклический сдвиг вектора влево на k позиций (in-place).
@@ -36,9 +50,23 @@ std::vector<int> filter_even(const std::vector<int>& v) {
 // Пример: v = {1, 2, 3},        k = 0  ->  v = {1, 2, 3}
 // -----------------------------------------------------------------------------
 void rotate_left(std::vector<int>& v, std::size_t k) {
-    throw std::runtime_error("Not implemented");
+    if (v.empty()) {
+        return;
+    }
+    k %= v.size(); 
+    if (k == 0) return;
+    
+    std::vector<int> rotate(v.size(), 0);
+    for (int i = k; i < v.size(); i++) {
+        rotate[i - k] = v[i];
+    }
+    
+    for (int i = 0; i < k; i++) {
+        rotate[v.size() - k + i] = v[i]; 
+    }
+    
+    v = rotate;
 }
-
 // -----------------------------------------------------------------------------
 // Задание 4: remove_duplicates (0.25 баллов)
 // Верните новый вектор, в котором удалены все дубликаты.
@@ -47,9 +75,23 @@ void rotate_left(std::vector<int>& v, std::size_t k) {
 // Пример: remove_duplicates({}) == {}
 // -----------------------------------------------------------------------------
 std::vector<int> remove_duplicates(const std::vector<int>& v) {
-    throw std::runtime_error("Not implemented");
-}
+    std::vector<int> res;
+    res.reserve(v.size());
 
+    for (int i = 0; i < v.size(); i++) {
+        bool found = false;
+        for (int j = 0; j < res.size(); j++) {
+            if (res[j] == v[i]) {
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            res.push_back(v[i]);
+        }
+    }
+    return res;
+}
 // -----------------------------------------------------------------------------
 // Задание 5: flatten (0.25 баллов)
 // «Разверните» двумерный вектор в одномерный, обходя строки слева направо,
@@ -58,9 +100,26 @@ std::vector<int> remove_duplicates(const std::vector<int>& v) {
 // Пример: flatten({}) == {}
 // -----------------------------------------------------------------------------
 std::vector<int> flatten(const std::vector<std::vector<int>>& matrix) {
-    throw std::runtime_error("Not implemented");
-}
+    if (matrix.empty()) {
+        return {};
+    }
+    int size_matrics = 0;
+    for (int i = 0; i < matrix.size(); i++) {
+        size_matrics += matrix[i].size();
+    }
 
+    std::vector<int> result;
+    result.reserve(size_matrics);
+
+    for (int i = 0; i < matrix.size(); i++) {
+        if (!matrix[i].empty()) {
+            for (int j = 0; j < matrix[i].size(); j++) {
+                result.push_back(matrix[i][j]);
+            }
+        }
+    }
+    return result;
+}
 // -----------------------------------------------------------------------------
 // Задание 6: merge_sorted (0.25 баллов)
 // Слейте два отсортированных по возрастанию вектора в один отсортированный
@@ -69,9 +128,31 @@ std::vector<int> flatten(const std::vector<std::vector<int>>& matrix) {
 // Пример: merge_sorted({}, {1, 2}) == {1, 2}
 // -----------------------------------------------------------------------------
 std::vector<int> merge_sorted(const std::vector<int>& a, const std::vector<int>& b) {
-    throw std::runtime_error("Not implemented");
+    std::vector<int> result;
+    std::size_t i = 0, j = 0;
+    
+    while (i < a.size() && j < b.size()) {
+        if (a[i] <= b[j]) {
+            result.push_back(a[i]);
+            ++i;
+        } else {
+            result.push_back(b[j]);
+            ++j;
+        }
+    }
+    
+    while (i < a.size()) {
+        result.push_back(a[i]);
+        ++i;
+    }
+    
+    while (j < b.size()) {
+        result.push_back(b[j]);
+        ++j;
+    }
+    
+    return result;
 }
-
 // -----------------------------------------------------------------------------
 // Задание 7: max_subarray_sum (0.5 баллов)
 // Найдите максимальную сумму непрерывного подмассива (алгоритм Кадане).
@@ -82,9 +163,19 @@ std::vector<int> merge_sorted(const std::vector<int>& a, const std::vector<int>&
 // Пример: max_subarray_sum({-3, -1, -2}) == -1
 // -----------------------------------------------------------------------------
 int max_subarray_sum(const std::vector<int>& v) {
-    throw std::runtime_error("Not implemented");
-}
+     if (v.empty()) {
+        throw std::invalid_argument("Vector is empty");
+    }
 
+    int sum = v[0];
+    int max_sum = v[0];
+
+     for (size_t i = 1; i < v.size(); i++) {
+         sum = std::max(v[i], sum + v[i]);
+          max_sum = std::max(max_sum, sum);
+     }
+     return max_sum;
+}
 // -----------------------------------------------------------------------------
 // Задание 8: group_by_remainder (0.5 баллов)
 // Сгруппируйте элементы по остатку от деления на k.
@@ -95,5 +186,12 @@ int max_subarray_sum(const std::vector<int>& v) {
 //      == {{0, 3, 6}, {1, 4}, {2, 5}}
 // -----------------------------------------------------------------------------
 std::vector<std::vector<int>> group_by_remainder(const std::vector<int>& v, int k) {
-    throw std::runtime_error("Not implemented");
+    if (k <= 0) {
+        throw std::invalid_argument("k<0");}
+        std::vector<std::vector<int>> result(k);
+        for (size_t i = 0; i < v.size(); i++) {
+        int r = (v[i] % k + k) % k;
+        result[r].push_back(v[i]);  
+    }
+    return result;
 }
