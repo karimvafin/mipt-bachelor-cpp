@@ -12,7 +12,11 @@
 // Пример: unique_elements({}) == {}
 // -----------------------------------------------------------------------------
 std::set<int> unique_elements(const std::vector<int>& v) {
-    throw std::runtime_error("Not implemented");
+    std::set<int> s_unique;
+    for (auto i : v) {
+        s_unique.insert(i);
+    }
+    return s_unique;
 }
 
 // -----------------------------------------------------------------------------
@@ -23,7 +27,25 @@ std::set<int> unique_elements(const std::vector<int>& v) {
 // Пример: intersection({1,2}, {3,4}) == {}
 // -----------------------------------------------------------------------------
 std::set<int> intersection(const std::set<int>& a, const std::set<int>& b) {
-    throw std::runtime_error("Not implemented");
+    std::set<int> set_a(a.begin(), a.end());
+    std::set<int> set_b(b.begin(), b.end());
+    std::set<int> s_intersected;
+    
+    auto it_a = set_a.begin();
+    auto it_b = set_b.begin();
+
+    while (it_a != set_a.end() && it_b != set_b.end()) {
+        if (*it_a == *it_b) {
+            s_intersected.insert(*it_a);
+            it_a++;
+            it_b++;
+        }
+        else if (*it_a < *it_b) {
+            it_a++;
+        }
+        else it_b++;
+    }
+    return s_intersected;
 }
 
 // -----------------------------------------------------------------------------
@@ -35,7 +57,23 @@ std::set<int> intersection(const std::set<int>& a, const std::set<int>& b) {
 // Пример: symmetric_difference({1,2}, {1,2}) == {}
 // -----------------------------------------------------------------------------
 std::set<int> symmetric_difference(const std::set<int>& a, const std::set<int>& b) {
-    throw std::runtime_error("Not implemented");
+    std::set<int> set_a(a.begin(), a.end());
+    std::set<int> set_b(b.begin(), b.end());
+    std::set<int> s_difference;
+
+    for (auto x : set_a) {
+        if (set_b.find(x) == set_b.end()) {
+            s_difference.insert(x);
+        }
+    }
+
+    for (auto x : set_b) {
+        if (set_a.find(x) == set_a.end()) {
+            s_difference.insert(x);
+        }
+    }
+
+    return s_difference;
 }
 
 // -----------------------------------------------------------------------------
@@ -48,7 +86,12 @@ std::set<int> symmetric_difference(const std::set<int>& a, const std::set<int>& 
 // Подсказка: используйте find() для поиска дополнения за O(log n).
 // -----------------------------------------------------------------------------
 bool has_pair_with_sum(const std::set<int>& s, int target) {
-    throw std::runtime_error("Not implemented");
+    bool answer = false;
+    for (auto it = s.begin(); it != s.end(); it++) {
+        auto found = s.find(target - *it);
+        if (found != it && found != s.end()) answer = true;
+    }
+    return answer;
 }
 
 // -----------------------------------------------------------------------------
@@ -62,5 +105,86 @@ bool has_pair_with_sum(const std::set<int>& s, int target) {
 // Подсказка: lower_bound даёт ближайший элемент >= x; проверьте также предыдущий.
 // -----------------------------------------------------------------------------
 std::set<int> k_closest(const std::set<int>& s, int x, int k) {
-    throw std::runtime_error("Not implemented");
+    if (k < 0 || k > s.size()) throw std::invalid_argument("Неверное значение k");
+
+    auto found = s.find(x);
+    std::set<int> s_copy = s;
+    std::set<int> answer; 
+
+    if (k == 0) return answer;
+
+    int cnt;
+
+    if (found == s.end()) {
+        s_copy.insert(x);
+        cnt = 0;
+    }
+    else {
+        cnt = 1;
+        answer.insert(x);
+    }
+
+    found = s_copy.find(x);
+    auto it_l = found, it_r = found;
+    --it_l;
+    ++it_r;
+
+    while (cnt != k && it_l != s_copy.begin() && it_r != s_copy.end()) {
+        if (std::abs(*it_l - x) < std::abs(*it_r - x)) {
+            answer.insert(*it_l);
+            it_l--;
+        }
+        else if (std::abs(*it_r - x) < std::abs(*it_l - x)) {
+            answer.insert(*it_r);
+            it_r++;
+        }
+        else {
+            if (*it_l < *it_r) {
+                answer.insert(*it_l);
+                it_l--;
+            }
+            else {
+                answer.insert(*it_r);
+                it_r++;
+            }
+        }
+        cnt++;
+    }
+
+    if (cnt == k) return answer;
+
+    if (it_r == s_copy.end()) {
+        while (cnt != k) {
+            answer.insert(*it_l);
+            it_l--;
+            cnt++;
+        }
+
+        return answer;
+    }
+    
+    bool use_0 = false;
+    while (cnt != k) {
+        if (!use_0 && std::abs(*it_l - x) < std::abs(*it_r - x)) {
+            answer.insert(*it_l);
+            it_l--;
+        }
+        else if (std::abs(*it_r - x) < std::abs(*it_l - x)) {
+            answer.insert(*it_r);
+            it_r++;
+        }
+        else {
+            if (*it_l < *it_r) {
+                answer.insert(*it_l);
+                it_l--;
+            }
+            else {
+                answer.insert(*it_r);
+                it_r++;
+            }
+        }
+        cnt++;
+    }
+
+    return answer;
 }
