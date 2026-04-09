@@ -65,12 +65,12 @@ int most_frequent(const std::vector<int>& v) {
 std::vector<int> two_sum(const std::vector<int>& v, int target) {
     std::unordered_map<int, int> us;
     
-    for (int i = 0; i < v.size(); ++i) {
+    for (int i = 0; i < v.size(); i++) {
         int c = target - v[i];
         auto it = us.find(c);
         
         if (it != us.end()) {
-            return {it->second, i};  
+            return {it->second, i};
         }
         us[v[i]] = i;
     }
@@ -88,7 +88,22 @@ std::vector<int> two_sum(const std::vector<int>& v, int target) {
 // Подсказка: у анаграмм одинаковый набор символов — используйте его как ключ.
 // -----------------------------------------------------------------------------
 std::vector<std::vector<std::string>> group_anagrams(const std::vector<std::string>& words) {
-    throw std::runtime_error("Not implemented");
+    std::unordered_map<int, std::vector<std::string>> a;  
+    
+    for (const auto& word : words) {
+        int hash = 0;
+        for (char c : word) {
+            int val = (c - 'a' + 1);
+            hash += val * val;
+        }
+        a[hash].push_back(word);
+    }
+    
+    std::vector<std::vector<std::string>> res;
+    for (auto const& [k, v] : a) {
+        res.push_back(v);
+    }
+    return res;
 }
 
 // -----------------------------------------------------------------------------
@@ -101,5 +116,33 @@ std::vector<std::vector<std::string>> group_anagrams(const std::vector<std::stri
 // Пример: top_k_frequent({1}, 1) == {1}
 // -----------------------------------------------------------------------------
 std::vector<int> top_k_frequent(const std::vector<int>& v, int k) {
-    throw std::runtime_error("Not implemented");
+    if (k <= 0) {
+        throw std::invalid_argument("k must be positive");
+    }
+    
+    std::unordered_map<int, int> a;
+    for (auto i : v) {
+        a[i]++;
+    }
+    
+    if (k > (a.size())) {
+        throw std::invalid_argument("k exceeds number of unique elements");
+    }
+    
+    std::vector<std::vector<int>> vec(v.size() + 1);
+    
+    for (const auto& [val, c] : a) {
+        vec[c].push_back(val);
+    }
+    
+    std::vector<int> res;
+    for (int i = vec.size() - 1; i >= 0 && res.size() < k; i--) {
+        for (int val : vec[i]) {
+            res.push_back(val);
+            if (res.size() == k) {
+                break;
+            }
+        }
+    }
+    return res;
 }

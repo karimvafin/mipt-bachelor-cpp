@@ -96,7 +96,13 @@ void interleave(std::list<int>& a, std::list<int>& b) {
 // как сравнить элементы с обоих концов.
 // -----------------------------------------------------------------------------
 bool is_palindrome(const std::list<int>& l) {
-    std::list<int> r(l);
-    r.reverse();
-    return l == r;
+    auto jt = l.end();
+    for (auto it = l.begin(); it != l.end();) {
+        jt--;
+        if (*it != *jt) {
+            return false;
+        }
+        it++;
+    }
+    return true;
 }
