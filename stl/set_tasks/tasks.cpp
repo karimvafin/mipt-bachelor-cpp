@@ -12,7 +12,16 @@
 // Пример: unique_elements({}) == {}
 // -----------------------------------------------------------------------------
 std::set<int> unique_elements(const std::vector<int>& v) {
-    throw std::runtime_error("Not implemented");
+    std::set<int> result;     
+    auto real_position = v.begin();
+
+while (real_position!=v.end())
+{
+   result.insert(*real_position);
+   real_position++;
+}
+    return result;
+
 }
 
 // -----------------------------------------------------------------------------
@@ -23,9 +32,21 @@ std::set<int> unique_elements(const std::vector<int>& v) {
 // Пример: intersection({1,2}, {3,4}) == {}
 // -----------------------------------------------------------------------------
 std::set<int> intersection(const std::set<int>& a, const std::set<int>& b) {
-    throw std::runtime_error("Not implemented");
+    std::set<int> result;
+    auto real_position = a.begin();
+     if (a.empty() || b.empty()) {
+        return result;
+    }
+    while (real_position != a.end()) {
+        int search = *real_position;
+        auto found = b.find(search);
+         if (found != b.end()) {
+            result.insert(search);
+        }
+           real_position++;
+    }/
+    return result;
 }
-
 // -----------------------------------------------------------------------------
 // Задание 3: symmetric_difference (0.25 баллов)
 // Верните множество элементов, которые есть ровно в одном из двух множеств
@@ -35,7 +56,23 @@ std::set<int> intersection(const std::set<int>& a, const std::set<int>& b) {
 // Пример: symmetric_difference({1,2}, {1,2}) == {}
 // -----------------------------------------------------------------------------
 std::set<int> symmetric_difference(const std::set<int>& a, const std::set<int>& b) {
-    throw std::runtime_error("Not implemented");
+   std::set<int> result;
+   auto real_position = a.begin();
+    while (real_position != a.end()) {
+        if (b.find(*real_position) == b.end()) {
+            result.insert(*real_position);
+        }
+        ++real_position;
+    }
+
+    real_position = b.begin();
+    while (real_position!=b.end())
+    {
+        if(a.find(*real_position) == a.end())
+            {result.insert(*real_position);}
+        real_position++;
+    }
+    return result;
 }
 
 // -----------------------------------------------------------------------------
@@ -48,7 +85,17 @@ std::set<int> symmetric_difference(const std::set<int>& a, const std::set<int>& 
 // Подсказка: используйте find() для поиска дополнения за O(log n).
 // -----------------------------------------------------------------------------
 bool has_pair_with_sum(const std::set<int>& s, int target) {
-    throw std::runtime_error("Not implemented");
+    auto real_position = s.begin();
+    
+    while (real_position != s.end()) {
+        int first = *real_position;
+        int second = target - first;;
+        if (second != first && s.find(second) != s.end()) {
+            return true;
+        }
+        real_position++;}
+        return false;
+
 }
 
 // -----------------------------------------------------------------------------
@@ -62,5 +109,46 @@ bool has_pair_with_sum(const std::set<int>& s, int target) {
 // Подсказка: lower_bound даёт ближайший элемент >= x; проверьте также предыдущий.
 // -----------------------------------------------------------------------------
 std::set<int> k_closest(const std::set<int>& s, int x, int k) {
-    throw std::runtime_error("Not implemented");
+    if (k < 0 || static_cast<size_t>(k) > s.size()) {
+        throw std::invalid_argument("Invalid k");
+    }
+
+    if (k == 0) {
+        return {}; 
+    }
+     std::vector<std::pair<int, int>> with_dist;
+    auto real_position = s.begin();
+    
+    while (real_position != s.end()) {
+        int val = *real_position;
+        int dist = std::abs(val - x);
+        with_dist.push_back({val, dist});
+        ++real_position;
+    }
+
+    for (int i = 0; i < static_cast<int>(with_dist.size()) - 1; ++i) {
+        for (int j = i + 1; j < static_cast<int>(with_dist.size()); ++j) {
+            bool bubble = false;
+            
+            if (with_dist[j].second < with_dist[i].second) {
+                bubble = true; 
+            }
+            else if (with_dist[j].second == with_dist[i].second) {
+                if (with_dist[j].first < with_dist[i].first) {
+                    bubble = true; 
+                }
+            }
+            
+            if (bubble) {
+                std::swap(with_dist[i], with_dist[j]);
+            }
+        }
+    }
+
+     std::set<int> result;
+    for (int i = 0; i < k; ++i) {
+        result.insert(with_dist[i].first);
+    }
+    
+    return result;
 }
