@@ -12,8 +12,11 @@
 // Пример: sum({}) == 0
 // -----------------------------------------------------------------------------
 int sum(const std::list<int>& l) {
-    throw std::runtime_error("Not implemented");
-}
+    int s = 0;
+    for (auto it = l.begin(); it!=l.end(); ++it){
+        s+=*it;
+    }; return s;
+}   
 
 // -----------------------------------------------------------------------------
 // Задание 2: remove_if_even (0.25 баллов)
@@ -24,7 +27,10 @@ int sum(const std::list<int>& l) {
 // Пример: l = {2, 4, 6}        ->  l = {}
 // -----------------------------------------------------------------------------
 void remove_if_even(std::list<int>& l) {
-    throw std::runtime_error("Not implemented");
+    auto it = l.begin();
+    while (it!=l.end()){
+        it = (*it%2==0) ? l.erase(it) : ++it;
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -34,7 +40,15 @@ void remove_if_even(std::list<int>& l) {
 // Пример: flatten({}) == {}
 // -----------------------------------------------------------------------------
 std::list<int> flatten(const std::list<std::list<int>>& lists) {
-    throw std::runtime_error("Not implemented");
+    if (lists.size()==0){;
+        return {};
+    }
+    std::list<int> l2;
+    for (auto it = lists.begin(); it!=lists.end(); ++it){
+        for (auto jt = (*it).begin(); jt!=(*it).end(); ++jt){
+            l2.push_back(*jt);
+        }
+    }; return l2;
 }
 
 // -----------------------------------------------------------------------------
@@ -48,7 +62,20 @@ std::list<int> flatten(const std::list<std::list<int>>& lists) {
 // Подсказка: используйте splice — он переносит элементы без копирования.
 // -----------------------------------------------------------------------------
 void interleave(std::list<int>& a, std::list<int>& b) {
-    throw std::runtime_error("Not implemented");
+    auto starta = a.begin();
+    auto startb = b.begin();
+    while (starta!=a.end() && startb!=b.end()){
+        auto nowb = std::next(startb);
+        a.splice(std::next(starta),b,startb);
+        startb = nowb;
+        ++starta;
+        if (starta!=a.end()){
+            ++starta;
+        }
+    }
+    if (!b.empty()){
+        a.splice(a.end(),b);
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -62,5 +89,23 @@ void interleave(std::list<int>& a, std::list<int>& b) {
 // как сравнить элементы с обоих концов.
 // -----------------------------------------------------------------------------
 bool is_palindrome(const std::list<int>& l) {
-    throw std::runtime_error("Not implemented");
+    if (l.size() == 0 || l.size() == 1){
+        return true;
+    }
+    std::list<int> l2;
+    for (auto it = l.begin(); it!=l.end(); ++it){
+        l2.push_back(*it);
+    }
+    l2.reverse();
+    auto start1 = l.begin();
+    auto start2 = l2.begin();
+    while(start1!=l.end()){
+        if (*start1!=*start2){
+            return false;
+        }
+        else{
+            ++start1;
+            ++start2;
+        }
+    } return true;
 }
