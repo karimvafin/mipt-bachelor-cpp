@@ -1,7 +1,6 @@
 #include "tasks.h"
 
 #include <algorithm>
-#include <iostream>
 
 // =============================================================================
 // Задания по std::unordered_map
