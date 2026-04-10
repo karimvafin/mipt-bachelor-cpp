@@ -15,7 +15,11 @@
 // Пример: count_elements({}) == {}
 // -----------------------------------------------------------------------------
 std::unordered_map<int, int> count_elements(const std::vector<int>& v) {
-    throw std::runtime_error("Not implemented");
+    std::unordered_map<int, int> res;
+    for(int i : v){
+        res[i]++;
+    }
+    return res;
 }
 
 // -----------------------------------------------------------------------------
@@ -27,7 +31,19 @@ std::unordered_map<int, int> count_elements(const std::vector<int>& v) {
 // Пример: most_frequent({4, 4, 5, 5}) == 4
 // -----------------------------------------------------------------------------
 int most_frequent(const std::vector<int>& v) {
-    throw std::runtime_error("Not implemented");
+    if (v.empty()) {
+        throw std::invalid_argument("Vector is empty");
+    }
+    std::unordered_map<int, int> freq = count_elements(v);
+    int res = v[0];
+    int max = 0;
+    for (const auto& [i, count] : freq) {
+        if (count > max || (count == max && i < res)) {
+            max = count;
+            res = i;
+        }
+    }
+    return res;
 }
 
 // -----------------------------------------------------------------------------
@@ -40,7 +56,15 @@ int most_frequent(const std::vector<int>& v) {
 // Подсказка: используйте unordered_map для решения за O(n).
 // -----------------------------------------------------------------------------
 std::vector<int> two_sum(const std::vector<int>& v, int target) {
-    throw std::runtime_error("Not implemented");
+    std::unordered_map<int, int> s; 
+    for (int i = 0; i < static_cast<int>(v.size()); ++i) {
+        int j = target - v[i];       
+        if (s.count(j)) {
+            return {s[j], i};
+        }       
+        s[v[i]] = i;
+    }
+    return {};
 }
 
 // -----------------------------------------------------------------------------
@@ -53,7 +77,19 @@ std::vector<int> two_sum(const std::vector<int>& v, int target) {
 // Подсказка: у анаграмм одинаковый набор символов — используйте его как ключ.
 // -----------------------------------------------------------------------------
 std::vector<std::vector<std::string>> group_anagrams(const std::vector<std::string>& words) {
-    throw std::runtime_error("Not implemented");
+    std::unordered_map<std::string, std::vector<std::string>> groups;
+
+    for (const std::string& word : words) {
+        std::string key = word;
+        std::sort(key.begin(), key.end());
+        groups[key].push_back(word);
+    }
+
+    std::vector<std::vector<std::string>> res;
+    for (auto& pair : groups) {
+        res.push_back(std::move(pair.second)); 
+    }
+    return res;
 }
 
 // -----------------------------------------------------------------------------
@@ -66,5 +102,31 @@ std::vector<std::vector<std::string>> group_anagrams(const std::vector<std::stri
 // Пример: top_k_frequent({1}, 1) == {1}
 // -----------------------------------------------------------------------------
 std::vector<int> top_k_frequent(const std::vector<int>& v, int k) {
-    throw std::runtime_error("Not implemented");
+    if (k <= 0) {
+        throw std::invalid_argument("k must be positive");
+    }
+
+    std::unordered_map<int, int> freq;
+    for (int i : v) {
+        freq[i]++;
+    }
+    
+    if (k > freq.size()) {
+        throw std::invalid_argument("k is greater than number of unique elements");
+    }
+
+    std::vector<std::pair<int, int>> freq_vec;
+    for (const auto& p : freq) {
+        freq_vec.emplace_back(p.second, p.first);
+    }
+
+    std::sort(freq_vec.begin(), freq_vec.end(), 
+          [](auto a, auto b) { return a.first > b.first; });
+    
+
+    std::vector<int> res;
+    for (int i = 0; i < k; ++i) {
+        res.push_back(freq_vec[i].second);
+    }
+    return res;
 }
