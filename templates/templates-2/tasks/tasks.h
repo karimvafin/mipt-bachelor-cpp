@@ -53,7 +53,7 @@ public:
 };
 
 // -----------------------------------------------------------------------------
-// Задание 3: FixedArray<T, N> (0.25 баллов)
+// Задание 3: FixedArray<T, N> (0.5 баллов)
 // Реализуйте массив фиксированного размера с нетиповым параметром N.
 // operator[] с проверкой границ (бросает std::out_of_range).
 // Методы: size(), fill(value), at(index).
@@ -71,12 +71,10 @@ public:
     }
 
     T& operator[](int index) {
-        (void)index;
         throw std::runtime_error("Not implemented");
     }
 
     const T& operator[](int index) const {
-        (void)index;
         throw std::runtime_error("Not implemented");
     }
 
@@ -85,15 +83,14 @@ public:
     }
 
     void fill(const T& value) {
-        (void)value;
         throw std::runtime_error("Not implemented");
     }
 };
 
 // -----------------------------------------------------------------------------
 // Задание 4: Converter<T> с шаблонным методом convert_to<U>() (0.5 баллов)
-// Класс хранит значение типа T. Шаблонный метод convert_to<U>()
-// возвращает значение, приведённое к типу U через static_cast.
+// Реализуйте класс, который хранит значение типа T и с шаблонным методом convert_to<U>(),
+// который возвращает значение, приведённое к типу U через static_cast.
 // Пример: Converter<double> c(3.14); c.convert_to<int>() == 3
 // Пример: Converter<int> c(65); c.convert_to<char>() == 'A'
 // -----------------------------------------------------------------------------
@@ -101,7 +98,6 @@ template <typename T>
 class Converter {
 public:
     explicit Converter(const T& value) {
-        (void)value;
         throw std::runtime_error("Not implemented");
     }
 
@@ -128,14 +124,12 @@ template <typename T, typename U>
 class Pair {
 public:
     Pair(const T& f, const U& s) {
-        (void)f; (void)s;
         throw std::runtime_error("Not implemented");
     }
 
     // Конвертирующий конструктор из Pair<T2, U2>
     template <typename T2, typename U2>
     Pair(const Pair<T2, U2>& other) {
-        (void)other;
         throw std::runtime_error("Not implemented");
     }
 
@@ -149,7 +143,7 @@ public:
 };
 
 // -----------------------------------------------------------------------------
-// Задание 6: sum_all — variadic сумма через fold expression (0.25 баллов)
+// Задание 6: sum_all — variadic сумма через fold expression (0.5 баллов)
 // Возвращает сумму всех аргументов. При пустом вызове возвращает 0.
 // Пример: sum_all(1, 2, 3) == 6
 // Пример: sum_all(1.5, 2.5) == 4.0
@@ -157,7 +151,6 @@ public:
 // -----------------------------------------------------------------------------
 template <typename... Args>
 auto sum_all(const Args&... args) {
-    (void)sizeof...(args);
     throw std::runtime_error("Not implemented");
     return 0;
 }
@@ -173,7 +166,6 @@ auto sum_all(const Args&... args) {
 // -----------------------------------------------------------------------------
 template <typename... Args>
 int count_if_positive(const Args&... args) {
-    (void)sizeof...(args);
     throw std::runtime_error("Not implemented");
     return 0;
 }
@@ -190,7 +182,6 @@ int count_if_positive(const Args&... args) {
 // -----------------------------------------------------------------------------
 template <typename... Args>
 std::string concat_all(const Args&... args) {
-    (void)sizeof...(args);
     throw std::runtime_error("Not implemented");
     return "";
 }
@@ -205,13 +196,12 @@ std::string concat_all(const Args&... args) {
 // -----------------------------------------------------------------------------
 template <typename F, typename... Args>
 auto transform_to_vector(F&& func, const Args&... args) {
-    (void)sizeof...(args);
     throw std::runtime_error("Not implemented");
     return std::vector<int>{};
 }
 
 // -----------------------------------------------------------------------------
-// Задание 10: MyTuple с get (1.0 балл)
+// Задание 10: MyTuple с get (2.0 балл)
 // Реализуйте упрощённый кортеж через рекурсивное наследование.
 // Нужен шаблонный класс MyTuple<Types...> и функция my_get<N>(tuple).
 //
