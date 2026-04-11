@@ -1,22 +1,21 @@
 #include "tasks.h"
-#include <stdexcept>
 
 int sum(const std::vector<int>& v) {
-    int result = 0;
+    int s = 0;
     for (int x : v) {
-        result += x;
+        s += x;
     }
-    return result;
+    return s;
 }
 
 std::vector<int> filter_even(const std::vector<int>& v) {
-    std::vector<int> result;
+    std::vector<int> res;
     for (int x : v) {
         if (x % 2 == 0) {
-            result.push_back(x);
+            res.push_back(x);
         }
     }
-    return result;
+    return res;
 }
 
 void rotate_left(std::vector<int>& v, std::size_t k) {
@@ -25,97 +24,90 @@ void rotate_left(std::vector<int>& v, std::size_t k) {
     }
 
     k %= v.size();
-    std::vector<int> result;
+    std::vector<int> res;
 
     for (std::size_t i = k; i < v.size(); ++i) {
-        result.push_back(v[i]);
+        res.push_back(v[i]);
     }
-
     for (std::size_t i = 0; i < k; ++i) {
-        result.push_back(v[i]);
+        res.push_back(v[i]);
     }
 
-    v = result;
+    v = res;
 }
 
 std::vector<int> remove_duplicates(const std::vector<int>& v) {
-    std::vector<int> result;
+    std::vector<int> res;
 
     for (int x : v) {
-        bool found = false;
-
-        for (int y : result) {
+        bool ok = true;
+        for (int y : res) {
             if (x == y) {
-                found = true;
+                ok = false;
                 break;
             }
         }
-
-        if (!found) {
-            result.push_back(x);
+        if (ok) {
+            res.push_back(x);
         }
     }
 
-    return result;
+    return res;
 }
 
 std::vector<int> flatten(const std::vector<std::vector<int>>& matrix) {
-    std::vector<int> result;
-
+    std::vector<int> res;
     for (const auto& row : matrix) {
         for (int x : row) {
-            result.push_back(x);
+            res.push_back(x);
         }
     }
-
-    return result;
+    return res;
 }
 
 std::vector<int> merge_sorted(const std::vector<int>& a, const std::vector<int>& b) {
-    std::vector<int> result;
-    std::size_t i = 0;
-    std::size_t j = 0;
+    std::vector<int> res;
+    std::size_t i = 0, j = 0;
 
     while (i < a.size() && j < b.size()) {
         if (a[i] <= b[j]) {
-            result.push_back(a[i]);
+            res.push_back(a[i]);
             ++i;
         } else {
-            result.push_back(b[j]);
+            res.push_back(b[j]);
             ++j;
         }
     }
 
     while (i < a.size()) {
-        result.push_back(a[i]);
+        res.push_back(a[i]);
         ++i;
     }
-
     while (j < b.size()) {
-        result.push_back(b[j]);
+        res.push_back(b[j]);
         ++j;
     }
 
-    return result;
+    return res;
 }
 
 int max_subarray_sum(const std::vector<int>& v) {
     if (v.empty()) {
-        throw std::invalid_argument("empty vector");
+        throw std::invalid_argument("empty");
     }
 
-    int current = v[0];
+    int cur = v[0];
     int best = v[0];
 
     for (std::size_t i = 1; i < v.size(); ++i) {
-        if (current + v[i] > v[i]) {
-            current = current + v[i];
+        if (cur < 0) {
+            cur = v[i];
         } else {
-            current = v[i];
+            cur += v[i];
         }
 
-        if (current > best) {
-            best = current;
+        if (cur > best) {
+            best = cur;
         }
     }
 
@@ -124,15 +116,15 @@ int max_subarray_sum(const std::vector<int>& v) {
 
 std::vector<std::vector<int>> group_by_remainder(const std::vector<int>& v, int k) {
     if (k <= 0) {
-        throw std::invalid_argument("k must be positive");
+        throw std::invalid_argument("bad k");
     }
 
-    std::vector<std::vector<int>> result(k);
+    std::vector<std::vector<int>> res(k);
 
     for (int x : v) {
-        int remainder = (x % k + k) % k;
-        result[remainder].push_back(x);
+        int r = (x % k + k) % k;
+        res[r].push_back(x);
     }
 
-    return result;
+    return res;
 }
