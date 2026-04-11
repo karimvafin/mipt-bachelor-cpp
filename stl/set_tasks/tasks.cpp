@@ -1,4 +1,6 @@
 #include "tasks.h"
+#include <set>
+#include <vector>
 
 // =============================================================================
 // Задания по std::set
@@ -12,7 +14,11 @@
 // Пример: unique_elements({}) == {}
 // -----------------------------------------------------------------------------
 std::set<int> unique_elements(const std::vector<int>& v) {
-    throw std::runtime_error("Not implemented");
+    std::set<int> result;
+    for (int num : v) {
+        result.insert(num);
+    }
+    return result;
 }
 
 // -----------------------------------------------------------------------------
@@ -23,7 +29,15 @@ std::set<int> unique_elements(const std::vector<int>& v) {
 // Пример: intersection({1,2}, {3,4}) == {}
 // -----------------------------------------------------------------------------
 std::set<int> intersection(const std::set<int>& a, const std::set<int>& b) {
-    throw std::runtime_error("Not implemented");
+    std::set<int> result;
+    
+    for (int elem : a) {
+        if (b.find(elem) != b.end()) {
+            result.insert(elem);
+        }
+    }
+    
+    return result;
 }
 
 // -----------------------------------------------------------------------------
@@ -35,7 +49,19 @@ std::set<int> intersection(const std::set<int>& a, const std::set<int>& b) {
 // Пример: symmetric_difference({1,2}, {1,2}) == {}
 // -----------------------------------------------------------------------------
 std::set<int> symmetric_difference(const std::set<int>& a, const std::set<int>& b) {
-    throw std::runtime_error("Not implemented");
+    std::set<int> result;
+    for (int x : a) {
+        if (b.find(x) == b.end()) {
+            result.insert(x);
+        }
+    }
+    for (int x : b) {
+        if (a.find(x) == a.end()) {
+            result.insert(x);
+        }
+    }
+
+    return result;
 }
 
 // -----------------------------------------------------------------------------
@@ -48,7 +74,13 @@ std::set<int> symmetric_difference(const std::set<int>& a, const std::set<int>& 
 // Подсказка: используйте find() для поиска дополнения за O(log n).
 // -----------------------------------------------------------------------------
 bool has_pair_with_sum(const std::set<int>& s, int target) {
-    throw std::runtime_error("Not implemented");
+    for (int x : s) {
+        int da = target - x;
+        if (x != da && s.find(da) != s.end()) {
+            return true;
+        }
+    }
+    return false;
 }
 
 // -----------------------------------------------------------------------------
@@ -62,5 +94,45 @@ bool has_pair_with_sum(const std::set<int>& s, int target) {
 // Подсказка: lower_bound даёт ближайший элемент >= x; проверьте также предыдущий.
 // -----------------------------------------------------------------------------
 std::set<int> k_closest(const std::set<int>& s, int x, int k) {
-    throw std::runtime_error("Not implemented");
+    if (k < 0 || k > s.size()){
+        throw std::invalid_argument("Error!");
+    }
+    std::set<int> buffer(s);
+    std::set<int> result;
+    for (int i = 0; i < k; ++i){
+        auto ub = buffer.upper_bound(x);
+        auto lb = buffer.lower_bound(x);
+
+        if (lb == buffer.end()){
+            auto end = buffer.end();
+            --end;
+            result.insert(*end);
+            buffer.erase(end);
+            continue;
+        }
+
+        if (*lb == x){
+            result.insert(x);
+            buffer.erase(lb);
+            continue;
+        }
+
+        if (lb == buffer.begin()){
+            result.insert(*lb);
+            buffer.erase(lb);
+            continue;
+        }
+        --lb;
+        if (x - *lb <= *ub - x){
+            result.insert(*lb);
+            buffer.erase(lb);
+            continue;
+        }
+        if (*ub - x < x - *lb){
+            result.insert(*ub);
+            buffer.erase(ub);
+            continue;
+        }
+    }
+    return result;
 }
