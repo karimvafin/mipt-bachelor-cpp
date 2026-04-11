@@ -15,7 +15,12 @@
 // Пример: count_elements({}) == {}
 // -----------------------------------------------------------------------------
 std::unordered_map<int, int> count_elements(const std::vector<int>& v) {
-    throw std::runtime_error("Not implemented");
+    std::unordered_map<int,int> a;
+    for(auto it=v.begin(); it<v.end(); ++it){
+        int count = std::count(v.begin(), v.end(), *it);
+        a.insert({*it, count});
+    }
+    return a;
 }
 
 // -----------------------------------------------------------------------------
@@ -27,7 +32,23 @@ std::unordered_map<int, int> count_elements(const std::vector<int>& v) {
 // Пример: most_frequent({4, 4, 5, 5}) == 4
 // -----------------------------------------------------------------------------
 int most_frequent(const std::vector<int>& v) {
-    throw std::runtime_error("Not implemented");
+    if(v.empty()){
+        throw std::invalid_argument(".");
+    }
+    std::unordered_map<int,int> m = count_elements(v);
+    int count = 0;
+    int res = 0;
+    for(auto it = m.begin(); it!=m.end(); ++it){
+        if(count<it->second){
+            count = it->second;
+            res = it->first;
+        }
+        else if(count == it->second){
+            if(it->first < res) res = it->first;
+        }
+    }
+    return res;
+
 }
 
 // -----------------------------------------------------------------------------
@@ -40,7 +61,15 @@ int most_frequent(const std::vector<int>& v) {
 // Подсказка: используйте unordered_map для решения за O(n).
 // -----------------------------------------------------------------------------
 std::vector<int> two_sum(const std::vector<int>& v, int target) {
-    throw std::runtime_error("Not implemented");
+     std::unordered_map<int,int> a;
+    for(auto it=v.begin(); it<v.end(); ++it){
+        auto it_ = a.find(target - *it);
+        if(it_!=a.end()){
+            std::vector<int> b = {it_->second, (int)(it - v.begin())} ;
+            return b;
+        }
+         a.insert({*it, (int)(it - v.begin())});
+    } 
 }
 
 // -----------------------------------------------------------------------------
