@@ -19,10 +19,6 @@ std::vector<int> filter_even(const std::vector<int>& v) {
 }
 
 void rotate_left(std::vector<int>& v, std::size_t k) {
-    if (v.empty()) {
-        return;
-    }
-
     k %= v.size();
     std::vector<int> res;
 
@@ -38,7 +34,6 @@ void rotate_left(std::vector<int>& v, std::size_t k) {
 
 std::vector<int> remove_duplicates(const std::vector<int>& v) {
     std::vector<int> res;
-
     for (int x : v) {
         bool ok = true;
         for (int y : res) {
@@ -51,7 +46,6 @@ std::vector<int> remove_duplicates(const std::vector<int>& v) {
             res.push_back(x);
         }
     }
-
     return res;
 }
 
@@ -68,7 +62,6 @@ std::vector<int> flatten(const std::vector<std::vector<int>>& matrix) {
 std::vector<int> merge_sorted(const std::vector<int>& a, const std::vector<int>& b) {
     std::vector<int> res;
     std::size_t i = 0, j = 0;
-
     while (i < a.size() && j < b.size()) {
         if (a[i] <= b[j]) {
             res.push_back(a[i]);
@@ -78,7 +71,6 @@ std::vector<int> merge_sorted(const std::vector<int>& a, const std::vector<int>&
             ++j;
         }
     }
-
     while (i < a.size()) {
         res.push_back(a[i]);
         ++i;
@@ -87,18 +79,12 @@ std::vector<int> merge_sorted(const std::vector<int>& a, const std::vector<int>&
         res.push_back(b[j]);
         ++j;
     }
-
     return res;
 }
 
 int max_subarray_sum(const std::vector<int>& v) {
-    if (v.empty()) {
-        throw std::invalid_argument("empty");
-    }
-
     int cur = v[0];
     int best = v[0];
-
     for (std::size_t i = 1; i < v.size(); ++i) {
         if (cur < 0) {
             cur = v[i];
@@ -110,21 +96,14 @@ int max_subarray_sum(const std::vector<int>& v) {
             best = cur;
         }
     }
-
     return best;
 }
 
 std::vector<std::vector<int>> group_by_remainder(const std::vector<int>& v, int k) {
-    if (k <= 0) {
-        throw std::invalid_argument("bad k");
-    }
-
     std::vector<std::vector<int>> res(k);
-
     for (int x : v) {
         int r = (x % k + k) % k;
         res[r].push_back(x);
     }
-
     return res;
 }
