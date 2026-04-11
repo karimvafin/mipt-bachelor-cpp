@@ -15,7 +15,11 @@
 // Пример: count_elements({}) == {}
 // -----------------------------------------------------------------------------
 std::unordered_map<int, int> count_elements(const std::vector<int>& v) {
-    throw std::runtime_error("Not implemented");
+    std::unordered_map<int, int> result;
+    for (int value : v) {
+        result[value]++;
+    }
+    return result;
 }
 
 // -----------------------------------------------------------------------------
@@ -27,7 +31,24 @@ std::unordered_map<int, int> count_elements(const std::vector<int>& v) {
 // Пример: most_frequent({4, 4, 5, 5}) == 4
 // -----------------------------------------------------------------------------
 int most_frequent(const std::vector<int>& v) {
-    throw std::runtime_error("Not implemented");
+    if (v.empty()) {
+        throw std::invalid_argument("Vector is empty");
+    }
+    
+    auto counts = count_elements(v);
+    
+    int most_freq_element = v[0];
+    int max_count = 0;
+    
+    for (const auto& pair : counts) {
+        if (pair.second > max_count || 
+            (pair.second == max_count && pair.first < most_freq_element)) {
+            max_count = pair.second;
+            most_freq_element = pair.first;
+        }
+    }
+    
+    return most_freq_element;
 }
 
 // -----------------------------------------------------------------------------
@@ -40,7 +61,20 @@ int most_frequent(const std::vector<int>& v) {
 // Подсказка: используйте unordered_map для решения за O(n).
 // -----------------------------------------------------------------------------
 std::vector<int> two_sum(const std::vector<int>& v, int target) {
-    throw std::runtime_error("Not implemented");
+    std::unordered_map<int, int> seen; // value -> index
+    
+    for (int i = 0; i < static_cast<int>(v.size()); ++i) {
+        int complement = target - v[i];
+        
+        auto it = seen.find(complement);
+        if (it != seen.end()) {
+            return {it->second, i};
+        }
+        
+        seen[v[i]] = i;
+    }
+    
+    return {};
 }
 
 // -----------------------------------------------------------------------------
@@ -53,7 +87,20 @@ std::vector<int> two_sum(const std::vector<int>& v, int target) {
 // Подсказка: у анаграмм одинаковый набор символов — используйте его как ключ.
 // -----------------------------------------------------------------------------
 std::vector<std::vector<std::string>> group_anagrams(const std::vector<std::string>& words) {
-    throw std::runtime_error("Not implemented");
+    std::unordered_map<std::string, std::vector<std::string>> groups;
+    
+    for (const std::string& word : words) {
+        std::string sorted = word;
+        std::sort(sorted.begin(), sorted.end());
+        groups[sorted].push_back(word);
+    }
+    
+    std::vector<std::vector<std::string>> result;
+    for (auto& pair : groups) {
+        result.push_back(std::move(pair.second));
+    }
+    
+    return result;
 }
 
 // -----------------------------------------------------------------------------
@@ -66,5 +113,29 @@ std::vector<std::vector<std::string>> group_anagrams(const std::vector<std::stri
 // Пример: top_k_frequent({1}, 1) == {1}
 // -----------------------------------------------------------------------------
 std::vector<int> top_k_frequent(const std::vector<int>& v, int k) {
-    throw std::runtime_error("Not implemented");
+    if (k <= 0) {
+        throw std::invalid_argument("k must be positive");
+    }
+    
+    auto counts = count_elements(v);
+    
+    if (k > static_cast<int>(counts.size())) {
+        throw std::invalid_argument("k exceeds number of unique elements");
+    }
+    
+    std::vector<std::pair<int, int>> freq_pairs;
+    for (const auto& pair : counts) {
+        freq_pairs.push_back({pair.second, pair.first});
+    }
+    
+    std::sort(freq_pairs.begin(), freq_pairs.end(),
+              [](const std::pair<int, int>& a, const std::pair<int, int>& b) {
+                  return a.first > b.first;
+              });
+    std::vector<int> result;
+    for (int i = 0; i < k; ++i) {
+        result.push_back(freq_pairs[i].second);
+    }
+    
+    return result;
 }
