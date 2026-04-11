@@ -1,8 +1,9 @@
 #pragma once
 
+#include <algorithm>
 #include <set>
-#include <vector>
 #include <stdexcept>
+#include <vector>
 
 std::set<int> unique_elements(const std::vector<int>& v);
 
