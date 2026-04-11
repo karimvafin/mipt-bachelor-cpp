@@ -82,9 +82,19 @@ std::vector<int> two_sum(const std::vector<int>& v, int target) {
 // Подсказка: у анаграмм одинаковый набор символов — используйте его как ключ.
 // -----------------------------------------------------------------------------
 std::vector<std::vector<std::string>> group_anagrams(const std::vector<std::string>& words) {
-    throw std::runtime_error("Not implemented");
-}
+    std::unordered_map< std::string, std::vector<std::string> > m;
+    for(auto it=words.begin(); it<words.end(); ++it){
+    std::string key = *it;                    
+    std::sort(key.begin(), key.end());        
+   m[key].push_back(*it); 
 
+}
+ std::vector<std::vector<std::string>> result;
+    for (auto& pair : m) {
+        result.push_back(pair.second);
+    }
+    return result;
+}
 // -----------------------------------------------------------------------------
 // Задание 5: top_k_frequent (0.5 баллов)
 // Верните k наиболее часто встречающихся элементов.
