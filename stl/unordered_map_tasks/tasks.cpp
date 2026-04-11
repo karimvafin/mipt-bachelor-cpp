@@ -15,7 +15,15 @@
 // Пример: count_elements({}) == {}
 // -----------------------------------------------------------------------------
 std::unordered_map<int, int> count_elements(const std::vector<int>& v) {
-    throw std::runtime_error("Not implemented");
+    std::unordered_map<int, int> result;
+    auto real_position = v.begin();
+    
+    while (real_position != v.end()) {
+        result[*real_position]++;
+        real_position++;
+    }
+    
+    return result;
 }
 
 // -----------------------------------------------------------------------------
@@ -27,7 +35,32 @@ std::unordered_map<int, int> count_elements(const std::vector<int>& v) {
 // Пример: most_frequent({4, 4, 5, 5}) == 4
 // -----------------------------------------------------------------------------
 int most_frequent(const std::vector<int>& v) {
-    throw std::runtime_error("Not implemented");
+    if (v.empty()) {
+        throw std::invalid_argument("Vector is empty");
+    }
+    
+
+    std::unordered_map<int, int> freq = count_elements(v);
+    
+    int best_value = 0;
+    int best_count = 0;
+    bool first = true;
+    
+    auto real_position = freq.begin();
+    
+    while (real_position != freq.end()) {
+        int value = real_position->first;
+        int count = real_position->second;
+        
+        if (first || count > best_count || (count == best_count && value < best_value)) {
+            best_count = count;
+            best_value = value;
+            first = false;
+        }
+        real_position++;
+    }
+    
+    return best_value;
 }
 
 // -----------------------------------------------------------------------------
