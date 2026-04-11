@@ -12,7 +12,13 @@
 // Пример: unique_elements({}) == {}
 // -----------------------------------------------------------------------------
 std::set<int> unique_elements(const std::vector<int>& v) {
-    throw std::runtime_error("Not implemented");
+    std::set<int> res;
+
+    for (int x : v) {
+        res.insert(x);
+    }
+
+    return res;
 }
 
 // -----------------------------------------------------------------------------
@@ -23,7 +29,15 @@ std::set<int> unique_elements(const std::vector<int>& v) {
 // Пример: intersection({1,2}, {3,4}) == {}
 // -----------------------------------------------------------------------------
 std::set<int> intersection(const std::set<int>& a, const std::set<int>& b) {
-    throw std::runtime_error("Not implemented");
+    std::set<int> res;
+
+    for (int x : a) {
+        if (b.find(x) != b.end()) {
+            res.insert(x);
+        }
+    }
+
+    return res;
 }
 
 // -----------------------------------------------------------------------------
@@ -35,7 +49,20 @@ std::set<int> intersection(const std::set<int>& a, const std::set<int>& b) {
 // Пример: symmetric_difference({1,2}, {1,2}) == {}
 // -----------------------------------------------------------------------------
 std::set<int> symmetric_difference(const std::set<int>& a, const std::set<int>& b) {
-    throw std::runtime_error("Not implemented");
+    std::set<int> res;
+
+    for (int x : a) {
+        if (b.find(x) == b.end()) {
+            res.insert(x);
+        }
+    }
+    for (int x : b) {
+        if (a.find(x) == a.end()) {
+            res.insert(x);
+        }
+    }
+
+    return res;
 }
 
 // -----------------------------------------------------------------------------
@@ -48,7 +75,13 @@ std::set<int> symmetric_difference(const std::set<int>& a, const std::set<int>& 
 // Подсказка: используйте find() для поиска дополнения за O(log n).
 // -----------------------------------------------------------------------------
 bool has_pair_with_sum(const std::set<int>& s, int target) {
-    throw std::runtime_error("Not implemented");
+    for (int x : s) {
+        int y = target - x;
+        if (y != x && s.find(y) != s.end()) {
+            return true;
+        }
+    }
+    return false;
 }
 
 // -----------------------------------------------------------------------------
@@ -62,5 +95,47 @@ bool has_pair_with_sum(const std::set<int>& s, int target) {
 // Подсказка: lower_bound даёт ближайший элемент >= x; проверьте также предыдущий.
 // -----------------------------------------------------------------------------
 std::set<int> k_closest(const std::set<int>& s, int x, int k) {
-    throw std::runtime_error("Not implemented");
+    if (k < 0 || k > static_cast<int>(s.size())) {
+        throw std::invalid_argument("invalid k");
+    }
+
+    std::set<int> res;
+    auto R = s.lower_bound(x);
+    auto L = R;
+
+    if (L != s.begin()) {
+        --L;
+    } else {
+        L = s.end();
+    }
+
+    for (int i = 0; i < k; ++i) {
+        if (L == s.end()) {
+            res.insert(*R);
+            ++R;
+        } else if (R == s.end()) {
+            res.insert(*L);
+            if (L == s.begin()) {
+                L = s.end();
+            } else {
+                --L;
+            }
+        } else {
+            int Ldiff = std::abs(*L - x);
+            int Rdiff = std::abs(*R - x);
+            if (Ldiff <= Rdiff) {
+                res.insert(*L);
+                if (L == s.begin()) {
+                    L = s.end();
+                } else {
+                    --L;
+                }
+            } else {
+                res.insert(*R);
+                ++R;
+            }
+        }
+    }
+
+    return res;
 }
