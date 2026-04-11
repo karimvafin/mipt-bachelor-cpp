@@ -12,9 +12,12 @@
 // Пример: sum({}) == 0
 // -----------------------------------------------------------------------------
 int sum(const std::list<int>& l) {
-    throw std::runtime_error("Not implemented");
+    int result = 0;
+    for (int num : l) {
+        result += num;
+    }
+    return result;
 }
-
 // -----------------------------------------------------------------------------
 // Задание 2: remove_if_even (0.25 баллов)
 // Удалите все чётные элементы из списка in-place.
@@ -24,9 +27,14 @@ int sum(const std::list<int>& l) {
 // Пример: l = {2, 4, 6}        ->  l = {}
 // -----------------------------------------------------------------------------
 void remove_if_even(std::list<int>& l) {
-    throw std::runtime_error("Not implemented");
+    for (auto it = l.begin(); it != l.end(); ) {
+        if (*it % 2 == 0) {
+            it = l.erase(it);
+        } else {
+            ++it;
+        }
+    }
 }
-
 // -----------------------------------------------------------------------------
 // Задание 3: flatten (0.25 баллов)
 // Объедините список списков в один список, сохраняя порядок элементов.
@@ -34,9 +42,14 @@ void remove_if_even(std::list<int>& l) {
 // Пример: flatten({}) == {}
 // -----------------------------------------------------------------------------
 std::list<int> flatten(const std::list<std::list<int>>& lists) {
-    throw std::runtime_error("Not implemented");
+    std::list<int> result;
+    for (const auto& inner_list : lists) {
+        for (int value : inner_list) {
+            result.push_back(value);
+        }
+    }
+    return result;
 }
-
 // -----------------------------------------------------------------------------
 // Задание 4: interleave (0.25 баллов)
 // Перемежайте элементы двух списков в список a: сначала элемент из a,
@@ -48,9 +61,27 @@ std::list<int> flatten(const std::list<std::list<int>>& lists) {
 // Подсказка: используйте splice — он переносит элементы без копирования.
 // -----------------------------------------------------------------------------
 void interleave(std::list<int>& a, std::list<int>& b) {
-    throw std::runtime_error("Not implemented");
+    auto it_a = a.begin();
+    
+    while (!b.empty()) {
+        
+        if (it_a == a.end()) {
+            a.splice(it_a, b);
+            break;
+        }
+        
+        
+        auto next_a = std::next(it_a);
+        
+        a.splice(next_a, b, b.begin());
+        
+        
+        it_a = next_a;
+        if (it_a != a.end()) {
+            ++it_a;
+        }
+    }
 }
-
 // -----------------------------------------------------------------------------
 // Задание 5: is_palindrome (0.5 баллов)
 // Проверьте, является ли список палиндромом.
@@ -62,5 +93,19 @@ void interleave(std::list<int>& a, std::list<int>& b) {
 // как сравнить элементы с обоих концов.
 // -----------------------------------------------------------------------------
 bool is_palindrome(const std::list<int>& l) {
-    throw std::runtime_error("Not implemented");
+    if (l.size() <= 1) {
+        return true;
+    }
+     auto left = l.begin(); 
+      auto right  = l.end(); 
+      right--;
+
+       while (left != right && std::next(left) != right) {
+        if (*left != *right) {    
+            return false;
+        }
+        left++;                   
+        right--;                  
+    }
+    return true;
 }
