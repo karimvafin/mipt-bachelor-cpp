@@ -12,7 +12,11 @@
 // Пример: unique_elements({}) == {}
 // -----------------------------------------------------------------------------
 std::set<int> unique_elements(const std::vector<int>& v) {
-    throw std::runtime_error("Not implemented");
+    std::set<int> result;
+    for (std::vector<int>::const_iterator it = v.begin(); it != v.end(); ++it) {
+        result.insert(*it);
+    }
+    return result;
 }
 
 // -----------------------------------------------------------------------------
@@ -23,8 +27,15 @@ std::set<int> unique_elements(const std::vector<int>& v) {
 // Пример: intersection({1,2}, {3,4}) == {}
 // -----------------------------------------------------------------------------
 std::set<int> intersection(const std::set<int>& a, const std::set<int>& b) {
-    throw std::runtime_error("Not implemented");
+    std::set<int> result;
+    for (std::set<int>::const_iterator it = a.begin(); it != a.end(); ++it) {
+        if (b.find(*it) != b.end()) {
+            result.insert(*it);
+        }
+    }
+    return result;
 }
+
 
 // -----------------------------------------------------------------------------
 // Задание 3: symmetric_difference (0.25 баллов)
@@ -35,7 +46,18 @@ std::set<int> intersection(const std::set<int>& a, const std::set<int>& b) {
 // Пример: symmetric_difference({1,2}, {1,2}) == {}
 // -----------------------------------------------------------------------------
 std::set<int> symmetric_difference(const std::set<int>& a, const std::set<int>& b) {
-    throw std::runtime_error("Not implemented");
+    std::set<int> result;
+    for (std::set<int>::const_iterator it = a.begin(); it != a.end(); ++it) {
+        if (b.find(*it) == b.end()) {
+            result.insert(*it);
+        }
+    }
+    for (std::set<int>::const_iterator it = b.begin(); it != b.end(); ++it) {
+        if (a.find(*it) == a.end()) {
+            result.insert(*it);
+        }
+    }
+    return result;
 }
 
 // -----------------------------------------------------------------------------
@@ -48,7 +70,14 @@ std::set<int> symmetric_difference(const std::set<int>& a, const std::set<int>& 
 // Подсказка: используйте find() для поиска дополнения за O(log n).
 // -----------------------------------------------------------------------------
 bool has_pair_with_sum(const std::set<int>& s, int target) {
-    throw std::runtime_error("Not implemented");
+    for (std::set<int>::const_iterator it = s.begin(); it != s.end(); ++it) {
+        int x = *it;
+        int need = target - x;
+        if (need != x && s.find(need) != s.end()) {
+            return true;
+        }
+    }
+    return false;
 }
 
 // -----------------------------------------------------------------------------
