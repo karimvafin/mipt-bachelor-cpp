@@ -12,7 +12,11 @@
 // Пример: unique_elements({}) == {}
 // -----------------------------------------------------------------------------
 std::set<int> unique_elements(const std::vector<int>& v) {
-    throw std::runtime_error("Not implemented");
+    std::set<int> result;
+    for (int value : v) {
+        result.insert(value);
+    }
+    return result;
 }
 
 // -----------------------------------------------------------------------------
@@ -23,7 +27,17 @@ std::set<int> unique_elements(const std::vector<int>& v) {
 // Пример: intersection({1,2}, {3,4}) == {}
 // -----------------------------------------------------------------------------
 std::set<int> intersection(const std::set<int>& a, const std::set<int>& b) {
-    throw std::runtime_error("Not implemented");
+    std::set<int> result;
+    const std::set<int>& smaller = (a.size() < b.size()) ? a : b;
+    const std::set<int>& larger = (a.size() < b.size()) ? b : a;
+    
+    for (int value : smaller) {
+        if (larger.find(value) != larger.end()) {
+            result.insert(value);
+        }
+    }
+    
+    return result;
 }
 
 // -----------------------------------------------------------------------------
@@ -35,7 +49,20 @@ std::set<int> intersection(const std::set<int>& a, const std::set<int>& b) {
 // Пример: symmetric_difference({1,2}, {1,2}) == {}
 // -----------------------------------------------------------------------------
 std::set<int> symmetric_difference(const std::set<int>& a, const std::set<int>& b) {
-    throw std::runtime_error("Not implemented");
+    std::set<int> result;
+    for (int value : a) {
+        if (b.find(value) == b.end()) {
+            result.insert(value);
+        }
+    }
+    
+    for (int value : b) {
+        if (a.find(value) == a.end()) {
+            result.insert(value);
+        }
+    }
+    
+    return result;
 }
 
 // -----------------------------------------------------------------------------
@@ -48,7 +75,17 @@ std::set<int> symmetric_difference(const std::set<int>& a, const std::set<int>& 
 // Подсказка: используйте find() для поиска дополнения за O(log n).
 // -----------------------------------------------------------------------------
 bool has_pair_with_sum(const std::set<int>& s, int target) {
-    throw std::runtime_error("Not implemented");
+    for (int value : s) {
+        int complement = target - value;
+        
+        // Make sure we don't use the same element twice
+        if (complement != value) {
+            if (s.find(complement) != s.end()) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 // -----------------------------------------------------------------------------
@@ -62,5 +99,78 @@ bool has_pair_with_sum(const std::set<int>& s, int target) {
 // Подсказка: lower_bound даёт ближайший элемент >= x; проверьте также предыдущий.
 // -----------------------------------------------------------------------------
 std::set<int> k_closest(const std::set<int>& s, int x, int k) {
-    throw std::runtime_error("Not implemented");
+    if (k < 0 || k > static_cast<int>(s.size())) {
+        throw std::invalid_argument("k must be between 0 and s.size()");
+    }
+    
+    if (k == 0) {
+        return std::set<int>();
+    }
+    
+    auto it = s.lower_bound(x);
+    std::vector<int> candidates;
+    
+    auto left = it;
+    auto right = it;
+    
+    if (left != s.begin()) {
+        --left;
+    } else {
+        left = s.end();
+    
+    
+    if (right == s.end() && left != s.end()) {
+        right = s.end();
+    }
+
+    while (candidates.size() < static_cast<size_t>(k)) {
+        bool left_valid = (left != s.end());
+        bool right_valid = (right != s.end());
+        
+        if (!left_valid && !right_valid) {
+            break;
+        }
+        
+        if (!left_valid) {
+            candidates.push_back(*right);
+            ++right;
+        } else if (!right_valid) {
+            candidates.push_back(*left);
+            if (left != s.begin()) {
+                --left;
+            } else {
+                left = s.end();
+            }
+        } else {
+            int left_dist = std::abs(*left - x);
+            int right_dist = std::abs(*right - x);
+            
+            if (left_dist < right_dist) {
+                candidates.push_back(*left);
+                if (left != s.begin()) {
+                    --left;
+                } else {
+                    left = s.end();
+                }
+            } else if (right_dist < left_dist) {
+                candidates.push_back(*right);
+                ++right;
+            } else {
+                if (*left < *right) {
+                    candidates.push_back(*left);
+                    if (left != s.begin()) {
+                        --left;
+                    } else {
+                        left = s.end();
+                    }
+                } else {
+                    candidates.push_back(*right);
+                    ++right;
+                }
+            }
+        }
+    }
+    
+    std::set<int> result(candidates.begin(), candidates.end());
+    return result;
 }
