@@ -21,7 +21,7 @@
 // -----------------------------------------------------------------------------
 template <typename T>
 T my_min(const T& a, const T& b) {
-    throw std::runtime_error("Not implemented");
+    return (a<b) ? a : b;
 }
 
 // -----------------------------------------------------------------------------
@@ -35,20 +35,23 @@ T my_min(const T& a, const T& b) {
 template <typename T>
 class Box {
 public:
+    T val;
     explicit Box(const T& value) {
-        throw std::runtime_error("Not implemented");
+        val = value;
     }
 
     const T& get() const {
-        throw std::runtime_error("Not implemented");
+        return val;
     }
 
     void set(const T& value) {
-        throw std::runtime_error("Not implemented");
+        val = value;
     }
 
     std::string to_string() const {
-        throw std::runtime_error("Not implemented");
+        std::ostringstream oss;
+        oss<<val;
+        return oss.str();
     }
 };
 
@@ -61,29 +64,38 @@ public:
 // -----------------------------------------------------------------------------
 template <typename T, int N>
 class FixedArray {
+private:
+    T data[N];
 public:
     T& at(int index) {
-        throw std::runtime_error("Not implemented");
+        if (index<0 || index>N-1){throw std::out_of_range("invalid index");}
+        return data[index];
     }
 
     const T& at(int index) const {
-        throw std::runtime_error("Not implemented");
+        if (index<0 || index>N-1){throw std::out_of_range("invalid index");}
+        return data[index];
     }
 
     T& operator[](int index) {
-        throw std::runtime_error("Not implemented");
+        if (index<0 || index>N-1){throw std::out_of_range("invalid index");}
+        else {return data[index];}
     }
 
     const T& operator[](int index) const {
-        throw std::runtime_error("Not implemented");
+        if (index<0 || index>N-1){
+            throw std::out_of_range("invalid index");}
+        else {return data[index];}
     }
 
     int size() const {
-        throw std::runtime_error("Not implemented");
+       return N;
     }
 
     void fill(const T& value) {
-        throw std::runtime_error("Not implemented");
+        for (int i=0; i<N; ++i){
+            data[i] = value;
+        }
     }
 };
 
@@ -96,18 +108,19 @@ public:
 // -----------------------------------------------------------------------------
 template <typename T>
 class Converter {
+    T val;
 public:
     explicit Converter(const T& value) {
-        throw std::runtime_error("Not implemented");
+        val = value;
     }
 
     const T& get() const {
-        throw std::runtime_error("Not implemented");
+        return val;
     }
 
     template <typename U>
     U convert_to() const {
-        throw std::runtime_error("Not implemented");
+        return static_cast<U>(val);
     }
 };
 
@@ -122,23 +135,28 @@ public:
 // -----------------------------------------------------------------------------
 template <typename T, typename U>
 class Pair {
+private:
+    T frst;
+    U scnd;
 public:
     Pair(const T& f, const U& s) {
-        throw std::runtime_error("Not implemented");
+        frst = f;
+        scnd = s;
     }
 
     // Конвертирующий конструктор из Pair<T2, U2>
     template <typename T2, typename U2>
     Pair(const Pair<T2, U2>& other) {
-        throw std::runtime_error("Not implemented");
+        frst = static_cast<T>(other.first());
+        scnd = static_cast<U>(other.second());
     }
 
     const T& first() const {
-        throw std::runtime_error("Not implemented");
+        return frst;
     }
 
     const U& second() const {
-        throw std::runtime_error("Not implemented");
+        return scnd;
     }
 };
 
