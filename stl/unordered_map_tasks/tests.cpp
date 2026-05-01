@@ -124,7 +124,7 @@ void test_two_sum() {
     });
     run_test("two_sum: ответ в конце", [] {
         auto r = two_sum({1, 5, 3, 7}, 10);
-        check_eq(r, (std::vector<int>{1, 3}), "индексы 1 и 3");
+        check_eq(r, (std::vector<int>{2, 3}), "индексы 2 и 3");
     });
     run_test("two_sum: i < j", [] {
         auto r = two_sum({4, 1, 3, 2}, 5);
