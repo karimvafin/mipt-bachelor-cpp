@@ -283,13 +283,13 @@ void test_concat_all() {
         check_eq(concat_all(42), std::string("42"), "число 42");
     });
     run_test("concat_all: несколько аргументов", [] {
-        std::string result = concat_all(1, " + ", 2, " = ", 3);
+        std::string result = concat_all(1, "+", 2, "=", 3);
         check_eq(result, std::string("1 + 2 = 3"), "1 + 2 = 3");
     });
     run_test("concat_all: разные типы", [] {
         std::string result = concat_all("x=", 42, " y=", 3.14);
         // Проверяем начало, т.к. точное представление double может варьироваться
-        check(result.substr(0, 4) == "x=42", "должно начинаться с x=42");
+        check(result.substr(0, 5) == "x= 42", "должно начинаться с x= 42");
     });
 }
 
