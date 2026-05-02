@@ -21,9 +21,10 @@
 // -----------------------------------------------------------------------------
 template <typename T>
 T my_min(const T& a, const T& b) {
-    throw std::runtime_error("Not implemented");
+    if(a<b)
+    return a;
+    else return b;
 }
-
 // -----------------------------------------------------------------------------
 // Задание 2: Box<T> (0.25 баллов)
 // Реализуйте шаблонный класс, хранящий одно значение типа T.
@@ -34,24 +35,26 @@ T my_min(const T& a, const T& b) {
 // -----------------------------------------------------------------------------
 template <typename T>
 class Box {
+private:
+T value1;
 public:
-    explicit Box(const T& value) {
-        throw std::runtime_error("Not implemented");
-    }
+    explicit Box(const T& value) : value1(value){}
 
     const T& get() const {
-        throw std::runtime_error("Not implemented");
+       return value1;
     }
 
     void set(const T& value) {
-        throw std::runtime_error("Not implemented");
+        value1=value;
     }
 
     std::string to_string() const {
-        throw std::runtime_error("Not implemented");
+        std::ostringstream ovalue;
+        ovalue<<value1;
+        return ovalue.str();
+        
     }
 };
-
 // -----------------------------------------------------------------------------
 // Задание 3: FixedArray<T, N> (0.5 баллов)
 // Реализуйте массив фиксированного размера с нетиповым параметром N.
@@ -61,31 +64,57 @@ public:
 // -----------------------------------------------------------------------------
 template <typename T, int N>
 class FixedArray {
+private:
+T data[N];
 public:
     T& at(int index) {
-        throw std::runtime_error("Not implemented");
+        if(index <0 || index>=N)
+        {
+            throw std::out_of_range("Error");
+        }
+        return data[index];
     }
 
     const T& at(int index) const {
-        throw std::runtime_error("Not implemented");
+       if(index <0 || index>=N)
+        {
+            throw std::out_of_range("Error");
+        }
+        return data[index];
     }
 
     T& operator[](int index) {
-        throw std::runtime_error("Not implemented");
+        if(index <0 || index>=N)
+        {
+            throw std::out_of_range("Error");
+        }
+        return data[index];
     }
 
     const T& operator[](int index) const {
-        throw std::runtime_error("Not implemented");
+        if(index <0 || index>=N)
+        {
+            throw std::out_of_range("Error");
+        }
+        return data[index];
     }
 
     int size() const {
-        throw std::runtime_error("Not implemented");
+        return N;
     }
 
     void fill(const T& value) {
-        throw std::runtime_error("Not implemented");
+        for(int i=0; i<N; i++)
+        {
+            data[i]=value;
+        }
     }
 };
+
+
+
+
+
 
 // -----------------------------------------------------------------------------
 // Задание 4: Converter<T> с шаблонным методом convert_to<U>() (0.5 баллов)
@@ -94,22 +123,27 @@ public:
 // Пример: Converter<double> c(3.14); c.convert_to<int>() == 3
 // Пример: Converter<int> c(65); c.convert_to<char>() == 'A'
 // -----------------------------------------------------------------------------
+
 template <typename T>
 class Converter {
+private:
+    T value;
+
 public:
-    explicit Converter(const T& value) {
-        throw std::runtime_error("Not implemented");
+    explicit Converter(const T& value) : value(value) {
     }
 
     const T& get() const {
-        throw std::runtime_error("Not implemented");
+        return value;
     }
 
     template <typename U>
     U convert_to() const {
-        throw std::runtime_error("Not implemented");
+        return static_cast<U>(value);
     }
 };
+
+
 
 // -----------------------------------------------------------------------------
 // Задание 5: Pair<T, U> с конвертирующим конструктором (0.5 баллов)
@@ -120,27 +154,32 @@ public:
 //          Pair<double, double> p2(p1); // int -> double
 //          p2.first() == 1.0; p2.second() == 2.0
 // -----------------------------------------------------------------------------
+
 template <typename T, typename U>
 class Pair {
+private:
+    T first_val;
+    U second_val;
+
 public:
-    Pair(const T& f, const U& s) {
-        throw std::runtime_error("Not implemented");
+    Pair(const T& f, const U& s) : first_val(f), second_val(s) {
     }
 
-    // Конвертирующий конструктор из Pair<T2, U2>
     template <typename T2, typename U2>
-    Pair(const Pair<T2, U2>& other) {
-        throw std::runtime_error("Not implemented");
+    Pair(const Pair<T2, U2>& other) 
+        : first_val(static_cast<T>(other.first())), 
+          second_val(static_cast<U>(other.second())) {
     }
 
     const T& first() const {
-        throw std::runtime_error("Not implemented");
+        return first_val;
     }
 
     const U& second() const {
-        throw std::runtime_error("Not implemented");
+        return second_val;
     }
 };
+
 
 // -----------------------------------------------------------------------------
 // Задание 6: sum_all — variadic сумма через fold expression (0.5 баллов)
@@ -149,10 +188,14 @@ public:
 // Пример: sum_all(1.5, 2.5) == 4.0
 // Пример: sum_all() == 0
 // -----------------------------------------------------------------------------
+
 template <typename... Args>
 auto sum_all(const Args&... args) {
-    throw std::runtime_error("Not implemented");
-    return 0;
+    if constexpr (sizeof...(args) == 0) {
+        return 0;
+    } else {
+        return (args + ...);
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -164,10 +207,14 @@ auto sum_all(const Args&... args) {
 // Пример: count_if_positive(-1, -2) == 0
 // Пример: count_if_positive() == 0
 // -----------------------------------------------------------------------------
+
 template <typename... Args>
 int count_if_positive(const Args&... args) {
-    throw std::runtime_error("Not implemented");
-    return 0;
+    if constexpr (sizeof...(args) == 0) {
+        return 0;
+    } else {
+        return ((args > 0) + ...);
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -182,10 +229,14 @@ int count_if_positive(const Args&... args) {
 // -----------------------------------------------------------------------------
 template <typename... Args>
 std::string concat_all(const Args&... args) {
-    throw std::runtime_error("Not implemented");
-    return "";
+    std::ostringstream oss;
+    ((oss << args << " "), ...);
+    std::string result = oss.str();
+    if (!result.empty() && result.back() == ' ') {
+        result.pop_back();
+    }
+    return result;
 }
-
 // -----------------------------------------------------------------------------
 // Задание 9: transform_to_vector — применить выражение к variadic (0.5 баллов)
 // Принимает функцию и произвольное количество аргументов.
@@ -194,10 +245,10 @@ std::string concat_all(const Args&... args) {
 // Пример: transform_to_vector([](int x){ return x*x; }, 1, 2, 3) == {1, 4, 9}
 // Пример: transform_to_vector([](int x){ return x+1; }, 10) == {11}
 // -----------------------------------------------------------------------------
+
 template <typename F, typename... Args>
 auto transform_to_vector(F&& func, const Args&... args) {
-    throw std::runtime_error("Not implemented");
-    return std::vector<int>{};
+    return std::vector{func(args)...};
 }
 
 // -----------------------------------------------------------------------------
@@ -221,47 +272,28 @@ auto transform_to_vector(F&& func, const Args&... args) {
 // База рекурсии
 template <typename... Types>
 struct MyTuple {
-    // Пустой кортеж — ничего не хранит
 };
 
-// TODO: реализуйте специализацию MyTuple<Head, Tail...>
-// которая хранит Head value и наследуется от MyTuple<Tail...>
-// Раскомментируйте и допишите:
-//
-// template <typename Head, typename... Tail>
-// struct MyTuple<Head, Tail...> : MyTuple<Tail...> {
-//     Head value;
-//     MyTuple() = default;
-//     MyTuple(const Head& h, const Tail&... t)
-//         : MyTuple<Tail...>(t...), value(h) {}
-// };
-
-// Заглушка: позволяет коду компилироваться до реализации.
-// Удалите эту специализацию, когда напишете свою выше.
 template <typename Head, typename... Tail>
 struct MyTuple<Head, Tail...> : MyTuple<Tail...> {
-    Head value{};
+    Head value;
+    
     MyTuple() = default;
-
-    template <typename... Args>
-    MyTuple(const Head&, const Args&...) {
-        throw std::runtime_error("Not implemented");
-    }
+    
+    MyTuple(const Head& h, const Tail&... t) 
+        : MyTuple<Tail...>(t...), value(h) {}
 };
 
-// TODO: реализуйте функцию my_get<N>(MyTuple<Head, Tail...>& t)
-// которая возвращает ссылку на N-й элемент (используйте if constexpr)
 template <std::size_t N, typename Head, typename... Tail>
 auto& my_get(MyTuple<Head, Tail...>& t) {
-    // Замените throw на реализацию с if constexpr
-    throw std::runtime_error("Not implemented");
-    return t.value;  // заглушка, чтобы компилировалось
+    if constexpr (N == 0) {
+        return t.value;
+    } else {
+        return my_get<N - 1>(static_cast<MyTuple<Tail...>&>(t));
+    }
 }
 
-// TODO: реализуйте функцию my_tuple_size(const MyTuple<Types...>&)
-// которая возвращает sizeof...(Types)
 template <typename... Types>
 constexpr std::size_t my_tuple_size(const MyTuple<Types...>&) {
-    throw std::runtime_error("Not implemented");
-    return 0;
+    return sizeof...(Types);
 }
