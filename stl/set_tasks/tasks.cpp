@@ -12,9 +12,17 @@
 // Пример: unique_elements({}) == {}
 // -----------------------------------------------------------------------------
 std::set<int> unique_elements(const std::vector<int>& v) {
-    throw std::runtime_error("Not implemented");
-}
+    std::set<int> result;     
+    auto real_position = v.begin();
 
+while (real_position!=v.end())
+{
+   result.insert(*real_position);
+   real_position++;
+}
+    return result;
+
+}
 // -----------------------------------------------------------------------------
 // Задание 2: intersection (0.25 баллов)
 // Верните множество элементов, которые есть и в a, и в b.
@@ -23,9 +31,14 @@ std::set<int> unique_elements(const std::vector<int>& v) {
 // Пример: intersection({1,2}, {3,4}) == {}
 // -----------------------------------------------------------------------------
 std::set<int> intersection(const std::set<int>& a, const std::set<int>& b) {
-    throw std::runtime_error("Not implemented");
+    std::set<int> result;
+    for (int x : a) {
+        if (b.find(x) != b.end()) {
+            result.insert(x);
+        }
+    }
+    return result;
 }
-
 // -----------------------------------------------------------------------------
 // Задание 3: symmetric_difference (0.25 баллов)
 // Верните множество элементов, которые есть ровно в одном из двух множеств
@@ -35,9 +48,35 @@ std::set<int> intersection(const std::set<int>& a, const std::set<int>& b) {
 // Пример: symmetric_difference({1,2}, {1,2}) == {}
 // -----------------------------------------------------------------------------
 std::set<int> symmetric_difference(const std::set<int>& a, const std::set<int>& b) {
-    throw std::runtime_error("Not implemented");
+    std::set<int> result;
+    auto it_a = a.begin();
+    auto it_b = b.begin();
+    
+    while (it_a != a.end() && it_b != b.end()) {
+        if (*it_a == *it_b) {
+            ++it_a;
+            ++it_b;
+        } else if (*it_a < *it_b) {
+            result.insert(*it_a);
+            ++it_a;
+        } else {
+            result.insert(*it_b);
+            ++it_b;
+        }
+    }
+    
+    while (it_a != a.end()) {
+        result.insert(*it_a);
+        ++it_a;
+    }
+    
+    while (it_b != b.end()) {
+        result.insert(*it_b);
+        ++it_b;
+    }
+    
+    return result;
 }
-
 // -----------------------------------------------------------------------------
 // Задание 4: has_pair_with_sum (0.25 баллов)
 // Проверьте, существуют ли два различных элемента множества, сумма которых
@@ -48,9 +87,14 @@ std::set<int> symmetric_difference(const std::set<int>& a, const std::set<int>& 
 // Подсказка: используйте find() для поиска дополнения за O(log n).
 // -----------------------------------------------------------------------------
 bool has_pair_with_sum(const std::set<int>& s, int target) {
-    throw std::runtime_error("Not implemented");
+    for (int x : s) {
+        int complement = target - x;
+        if (s.find(complement) != s.end() && x != complement) {
+            return true;
+        }
+    }
+    return false;
 }
-
 // -----------------------------------------------------------------------------
 // Задание 5: k_closest (0.5 баллов)
 // Верните множество из k элементов, наиболее близких к x по абсолютному
@@ -62,5 +106,36 @@ bool has_pair_with_sum(const std::set<int>& s, int target) {
 // Подсказка: lower_bound даёт ближайший элемент >= x; проверьте также предыдущий.
 // -----------------------------------------------------------------------------
 std::set<int> k_closest(const std::set<int>& s, int x, int k) {
-    throw std::runtime_error("Not implemented");
+    if (k < 0 || k > static_cast<int>(s.size())) {
+        throw std::invalid_argument("Invalid k");
+    }
+    
+    std::set<int> result;
+    auto right = s.lower_bound(x);
+    auto left = (right == s.begin()) ? s.end() : std::prev(right);
+    
+    while (result.size() < static_cast<size_t>(k)) {
+        if (left == s.end()) {
+            result.insert(*right);
+            ++right;
+        } else if (right == s.end()) {
+            result.insert(*left);
+            if (left == s.begin()) break;
+            --left;
+        } else {
+            int dist_left = std::abs(*left - x);
+            int dist_right = std::abs(*right - x);
+            
+            if (dist_left <= dist_right) {
+                result.insert(*left);
+                if (left == s.begin()) break;
+                --left;
+            } else {
+                result.insert(*right);
+                ++right;
+            }
+        }
+    }
+    
+    return result;
 }

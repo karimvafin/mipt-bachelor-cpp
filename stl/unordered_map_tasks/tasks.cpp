@@ -15,9 +15,12 @@
 // Пример: count_elements({}) == {}
 // -----------------------------------------------------------------------------
 std::unordered_map<int, int> count_elements(const std::vector<int>& v) {
-    throw std::runtime_error("Not implemented");
+    std::unordered_map<int, int> result;
+    for (int num : v) {
+        result[num]++;
+    }
+    return result;
 }
-
 // -----------------------------------------------------------------------------
 // Задание 2: most_frequent (0.25 баллов)
 // Найдите элемент, который встречается чаще всего.
@@ -27,9 +30,27 @@ std::unordered_map<int, int> count_elements(const std::vector<int>& v) {
 // Пример: most_frequent({4, 4, 5, 5}) == 4
 // -----------------------------------------------------------------------------
 int most_frequent(const std::vector<int>& v) {
-    throw std::runtime_error("Not implemented");
+    if (v.empty()) {
+        throw std::invalid_argument("вектор пуст");
+    }
+    
+    std::unordered_map<int, int> freq;
+    for (int num : v) {
+        freq[num]++;
+    }
+    
+    int result = v[0];
+    int max_count = 0;
+    
+    for (const auto& pair : freq) {
+        if (pair.second > max_count || (pair.second == max_count && pair.first < result)) {
+            max_count = pair.second;
+            result = pair.first;
+        }
+    }
+    
+    return result;
 }
-
 // -----------------------------------------------------------------------------
 // Задание 3: two_sum (0.25 баллов)
 // Найдите индексы двух элементов, сумма которых равна target.
@@ -40,9 +61,21 @@ int most_frequent(const std::vector<int>& v) {
 // Подсказка: используйте unordered_map для решения за O(n).
 // -----------------------------------------------------------------------------
 std::vector<int> two_sum(const std::vector<int>& v, int target) {
-    throw std::runtime_error("Not implemented");
+    std::unordered_map<int, int> num_to_index;
+    
+    for (int i = 0; i < static_cast<int>(v.size()); ++i) {
+        int complement = target - v[i];
+        
+        auto it = num_to_index.find(complement);
+        if (it != num_to_index.end()) {
+            return {it->second, i};
+        }
+        
+        num_to_index[v[i]] = i;
+    }
+    
+    return {};
 }
-
 // -----------------------------------------------------------------------------
 // Задание 4: group_anagrams (0.25 баллов)
 // Сгруппируйте слова-анаграммы вместе.
@@ -53,9 +86,21 @@ std::vector<int> two_sum(const std::vector<int>& v, int target) {
 // Подсказка: у анаграмм одинаковый набор символов — используйте его как ключ.
 // -----------------------------------------------------------------------------
 std::vector<std::vector<std::string>> group_anagrams(const std::vector<std::string>& words) {
-    throw std::runtime_error("Not implemented");
+    std::unordered_map<std::string, std::vector<std::string>> groups;
+    
+    for (const auto& word : words) {
+        std::string key = word;
+        std::sort(key.begin(), key.end());
+        groups[key].push_back(word);
+    }
+    
+    std::vector<std::vector<std::string>> result;
+    for (const auto& group : groups) {
+        result.push_back(group.second);
+    }
+    
+    return result;
 }
-
 // -----------------------------------------------------------------------------
 // Задание 5: top_k_frequent (0.5 баллов)
 // Верните k наиболее часто встречающихся элементов.
@@ -66,5 +111,33 @@ std::vector<std::vector<std::string>> group_anagrams(const std::vector<std::stri
 // Пример: top_k_frequent({1}, 1) == {1}
 // -----------------------------------------------------------------------------
 std::vector<int> top_k_frequent(const std::vector<int>& v, int k) {
-    throw std::runtime_error("Not implemented");
+    if (k <= 0) {
+        throw std::invalid_argument("k must be positive");
+    }
+    
+    std::unordered_map<int, int> a;
+    for (auto i : v) {
+        a[i]++;
+    }
+    
+    if (k > (a.size())) {
+        throw std::invalid_argument("k exceeds number of unique elements");
+    }
+    
+    std::vector<std::vector<int>> vec(v.size() + 1);
+    
+    for (const auto& [val, c] : a) {
+        vec[c].push_back(val);
+    }
+    
+    std::vector<int> res;
+    for (int i = vec.size() - 1; i >= 0 && res.size() < k; i--) {
+        for (int val : vec[i]) {
+            res.push_back(val);
+            if (res.size() == k) {
+                break;
+            }
+        }
+    }
+    return res;
 }
