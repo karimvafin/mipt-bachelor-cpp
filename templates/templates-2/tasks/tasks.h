@@ -21,7 +21,10 @@
 // -----------------------------------------------------------------------------
 template <typename T>
 T my_min(const T& a, const T& b) {
-    throw std::runtime_error("Not implemented");
+    if (a < b) {
+        return a;
+    }
+    return b;
 }
 
 // -----------------------------------------------------------------------------
@@ -36,20 +39,24 @@ template <typename T>
 class Box {
 public:
     explicit Box(const T& value) {
-        throw std::runtime_error("Not implemented");
+        value_ = value;
     }
 
     const T& get() const {
-        throw std::runtime_error("Not implemented");
+        return value_;
     }
 
     void set(const T& value) {
-        throw std::runtime_error("Not implemented");
+        value_ = value;
     }
 
     std::string to_string() const {
-        throw std::runtime_error("Not implemented");
+        std::ostringstream oss;
+        oss << value_;
+        return oss.str();
     }
+private:
+    T value_;
 };
 
 // -----------------------------------------------------------------------------
@@ -63,28 +70,45 @@ template <typename T, int N>
 class FixedArray {
 public:
     T& at(int index) {
-        throw std::runtime_error("Not implemented");
+        if (index < 0 || index >= N) {
+            throw std::out_of_range("Index out of range");
+        }
+        return data_[index];
     }
 
     const T& at(int index) const {
-        throw std::runtime_error("Not implemented");
+        if (index < 0 || index >= N) {
+            throw std::out_of_range("Index out of range");
+        }
+        return data_[index];
     }
 
     T& operator[](int index) {
-        throw std::runtime_error("Not implemented");
+        if (index < 0 || index >= N) {
+            throw std::out_of_range("Index out of range");
+        }
+        return data_[index];
     }
 
     const T& operator[](int index) const {
-        throw std::runtime_error("Not implemented");
+        if (index < 0 || index >= N) {
+            throw std::out_of_range("Index out of range");
+        }
+        return data_[index];
     }
 
     int size() const {
-        throw std::runtime_error("Not implemented");
+        return N;
     }
 
     void fill(const T& value) {
-        throw std::runtime_error("Not implemented");
+        for (int i = 0; i < N; ++i) {
+            data_[i] = value;
+        }
     }
+
+private:
+    T data_[N];
 };
 
 // -----------------------------------------------------------------------------
@@ -97,18 +121,21 @@ public:
 template <typename T>
 class Converter {
 public:
+   
     explicit Converter(const T& value) {
-        throw std::runtime_error("Not implemented");
+         value_ = value;
     }
 
     const T& get() const {
-        throw std::runtime_error("Not implemented");
+        return value_;
     }
 
     template <typename U>
     U convert_to() const {
-        throw std::runtime_error("Not implemented");
+        return static_cast<U>(value_);;
     }
+private:
+    T value_; 
 };
 
 // -----------------------------------------------------------------------------
@@ -124,22 +151,27 @@ template <typename T, typename U>
 class Pair {
 public:
     Pair(const T& f, const U& s) {
-        throw std::runtime_error("Not implemented");
+        first_ = f;
+        second_ = s;
     }
 
     // Конвертирующий конструктор из Pair<T2, U2>
     template <typename T2, typename U2>
     Pair(const Pair<T2, U2>& other) {
-        throw std::runtime_error("Not implemented");
+        first_ = other.first();
+        second_ = other.second();
     }
 
     const T& first() const {
-        throw std::runtime_error("Not implemented");
+        return first_;
     }
 
     const U& second() const {
-        throw std::runtime_error("Not implemented");
+        return second_;
     }
+private:
+    T first_;
+    U second_; 
 };
 
 // -----------------------------------------------------------------------------
@@ -151,8 +183,7 @@ public:
 // -----------------------------------------------------------------------------
 template <typename... Args>
 auto sum_all(const Args&... args) {
-    throw std::runtime_error("Not implemented");
-    return 0;
+    return (args + ... + 0);
 }
 
 // -----------------------------------------------------------------------------
@@ -166,8 +197,7 @@ auto sum_all(const Args&... args) {
 // -----------------------------------------------------------------------------
 template <typename... Args>
 int count_if_positive(const Args&... args) {
-    throw std::runtime_error("Not implemented");
-    return 0;
+    return ((args > 0) + ... + 0);
 }
 
 // -----------------------------------------------------------------------------
@@ -182,8 +212,9 @@ int count_if_positive(const Args&... args) {
 // -----------------------------------------------------------------------------
 template <typename... Args>
 std::string concat_all(const Args&... args) {
-    throw std::runtime_error("Not implemented");
-    return "";
+    std::ostringstream oss;
+    ((oss << args), ...);
+    return oss.str();
 }
 
 // -----------------------------------------------------------------------------
@@ -196,8 +227,7 @@ std::string concat_all(const Args&... args) {
 // -----------------------------------------------------------------------------
 template <typename F, typename... Args>
 auto transform_to_vector(F&& func, const Args&... args) {
-    throw std::runtime_error("Not implemented");
-    return std::vector<int>{};
+    return std::vector{func(args)...};
 }
 
 // -----------------------------------------------------------------------------
@@ -228,40 +258,41 @@ struct MyTuple {
 // которая хранит Head value и наследуется от MyTuple<Tail...>
 // Раскомментируйте и допишите:
 //
-// template <typename Head, typename... Tail>
-// struct MyTuple<Head, Tail...> : MyTuple<Tail...> {
-//     Head value;
-//     MyTuple() = default;
-//     MyTuple(const Head& h, const Tail&... t)
-//         : MyTuple<Tail...>(t...), value(h) {}
-// };
+template <typename Head, typename... Tail>
+struct MyTuple<Head, Tail...> : MyTuple<Tail...> {
+    Head value;
+    MyTuple(const Head& h, const Tail&... t)
+        : MyTuple<Tail...>(t...), value(h) {}
+};
 
 // Заглушка: позволяет коду компилироваться до реализации.
 // Удалите эту специализацию, когда напишете свою выше.
-template <typename Head, typename... Tail>
-struct MyTuple<Head, Tail...> : MyTuple<Tail...> {
-    Head value{};
-    MyTuple() = default;
+// template <typename Head, typename... Tail>
+// struct MyTuple<Head, Tail...> : MyTuple<Tail...> {
+//     Head value{};
+//     MyTuple() = default;
 
-    template <typename... Args>
-    MyTuple(const Head&, const Args&...) {
-        throw std::runtime_error("Not implemented");
-    }
-};
+//     template <typename... Args>
+//     MyTuple(const Head&, const Args&...) {
+//         throw std::runtime_error("Not implemented");
+//     }
+// };
 
 // TODO: реализуйте функцию my_get<N>(MyTuple<Head, Tail...>& t)
 // которая возвращает ссылку на N-й элемент (используйте if constexpr)
 template <std::size_t N, typename Head, typename... Tail>
 auto& my_get(MyTuple<Head, Tail...>& t) {
-    // Замените throw на реализацию с if constexpr
-    throw std::runtime_error("Not implemented");
-    return t.value;  // заглушка, чтобы компилировалось
+    if constexpr (N == 0){
+        return t.value;
+    }
+    else{
+        return my_get<N - 1>(static_cast<MyTuple<Tail...>&>(t));
+    }
 }
 
 // TODO: реализуйте функцию my_tuple_size(const MyTuple<Types...>&)
 // которая возвращает sizeof...(Types)
 template <typename... Types>
 constexpr std::size_t my_tuple_size(const MyTuple<Types...>&) {
-    throw std::runtime_error("Not implemented");
-    return 0;
+    return sizeof...(Types);
 }
