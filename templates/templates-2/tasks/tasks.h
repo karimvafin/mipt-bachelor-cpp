@@ -143,22 +143,24 @@ public:
 template <typename T, typename U>
 class Pair {
 public:
-    Pair(const T& f, const U& s) {
-        throw std::runtime_error("Not implemented");
+    T x;
+    U y;
+    Pair(const T& f, const U& s): x(f), y(s) {
     }
 
     // Конвертирующий конструктор из Pair<T2, U2>
     template <typename T2, typename U2>
     Pair(const Pair<T2, U2>& other) {
-        throw std::runtime_error("Not implemented");
+        x = static_cast<T>(other.x);
+        y = static_cast<U>(other.y);
     }
 
     const T& first() const {
-        throw std::runtime_error("Not implemented");
+       return x;
     }
 
     const U& second() const {
-        throw std::runtime_error("Not implemented");
+        return y;
     }
 };
 
@@ -246,47 +248,36 @@ auto transform_to_vector(F&& func, const Args&... args) {
 // База рекурсии
 template <typename... Types>
 struct MyTuple {
-    // Пустой кортеж — ничего не хранит
 };
 
 // TODO: реализуйте специализацию MyTuple<Head, Tail...>
 // которая хранит Head value и наследуется от MyTuple<Tail...>
 // Раскомментируйте и допишите:
 //
-// template <typename Head, typename... Tail>
-// struct MyTuple<Head, Tail...> : MyTuple<Tail...> {
-//     Head value;
-//     MyTuple() = default;
-//     MyTuple(const Head& h, const Tail&... t)
-//         : MyTuple<Tail...>(t...), value(h) {}
-// };
-
-// Заглушка: позволяет коду компилироваться до реализации.
-// Удалите эту специализацию, когда напишете свою выше.
 template <typename Head, typename... Tail>
 struct MyTuple<Head, Tail...> : MyTuple<Tail...> {
-    Head value{};
+    Head value;
     MyTuple() = default;
-
-    template <typename... Args>
-    MyTuple(const Head&, const Args&...) {
-        throw std::runtime_error("Not implemented");
-    }
+    MyTuple(const Head& h, const Tail&... t)
+        : MyTuple<Tail...>(t...), value(h) {}
 };
+
+
 
 // TODO: реализуйте функцию my_get<N>(MyTuple<Head, Tail...>& t)
 // которая возвращает ссылку на N-й элемент (используйте if constexpr)
 template <std::size_t N, typename Head, typename... Tail>
 auto& my_get(MyTuple<Head, Tail...>& t) {
-    // Замените throw на реализацию с if constexpr
-    throw std::runtime_error("Not implemented");
-    return t.value;  // заглушка, чтобы компилировалось
+   if constexpr (N == 0) {
+        return t.value;
+    } else {
+        return my_get<N - 1>(static_cast<MyTuple<Tail...>&>(t));
+    }
 }
 
 // TODO: реализуйте функцию my_tuple_size(const MyTuple<Types...>&)
 // которая возвращает sizeof...(Types)
 template <typename... Types>
 constexpr std::size_t my_tuple_size(const MyTuple<Types...>&) {
-    throw std::runtime_error("Not implemented");
-    return 0;
+     return sizeof...(Types);
 }
