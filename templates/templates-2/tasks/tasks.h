@@ -169,8 +169,9 @@ public:
 // -----------------------------------------------------------------------------
 template <typename... Args>
 auto sum_all(const Args&... args) {
-    throw std::runtime_error("Not implemented");
-    return 0;
+    if constexpr (sizeof...(args)==0){return 0;}
+    else{return (args + ...);}
+    
 }
 
 // -----------------------------------------------------------------------------
@@ -184,9 +185,10 @@ auto sum_all(const Args&... args) {
 // -----------------------------------------------------------------------------
 template <typename... Args>
 int count_if_positive(const Args&... args) {
-    throw std::runtime_error("Not implemented");
-    return 0;
-}
+    if constexpr (sizeof...(args)==0){return 0;}
+    else{return (static_cast<int>(args>0) +...);}
+    }
+
 
 // -----------------------------------------------------------------------------
 // Задание 8: concat_all — конкатенация аргументов в строку (0.5 баллов)
@@ -200,8 +202,11 @@ int count_if_positive(const Args&... args) {
 // -----------------------------------------------------------------------------
 template <typename... Args>
 std::string concat_all(const Args&... args) {
-    throw std::runtime_error("Not implemented");
-    return "";
+    if constexpr (sizeof...(args)==0){return "";}
+    else{
+        std::ostringstream oss;
+        (oss << ... << args);
+        return oss.str();}
 }
 
 // -----------------------------------------------------------------------------
@@ -214,8 +219,8 @@ std::string concat_all(const Args&... args) {
 // -----------------------------------------------------------------------------
 template <typename F, typename... Args>
 auto transform_to_vector(F&& func, const Args&... args) {
-    throw std::runtime_error("Not implemented");
-    return std::vector<int>{};
+    if constexpr (sizeof...(args)==0){return std::vector<int>{};}
+    else{ return std::vector{ func(args)... };}
 }
 
 // -----------------------------------------------------------------------------
@@ -258,28 +263,27 @@ struct MyTuple {
 // Удалите эту специализацию, когда напишете свою выше.
 template <typename Head, typename... Tail>
 struct MyTuple<Head, Tail...> : MyTuple<Tail...> {
-    Head value{};
+    Head val;
     MyTuple() = default;
-
-    template <typename... Args>
-    MyTuple(const Head&, const Args&...) {
-        throw std::runtime_error("Not implemented");
-    }
+    MyTuple(const Head& h, const Tail&... t)
+        : MyTuple<Tail...>(t...),val(h){}
 };
 
 // TODO: реализуйте функцию my_get<N>(MyTuple<Head, Tail...>& t)
 // которая возвращает ссылку на N-й элемент (используйте if constexpr)
 template <std::size_t N, typename Head, typename... Tail>
 auto& my_get(MyTuple<Head, Tail...>& t) {
-    // Замените throw на реализацию с if constexpr
-    throw std::runtime_error("Not implemented");
-    return t.value;  // заглушка, чтобы компилировалось
+    if constexpr (N==0){
+        return t.val;
+    } 
+    else{
+        return my_get<N-1>(static_cast<MyTuple<Tail...>&>(t));
+    }
 }
 
 // TODO: реализуйте функцию my_tuple_size(const MyTuple<Types...>&)
 // которая возвращает sizeof...(Types)
 template <typename... Types>
 constexpr std::size_t my_tuple_size(const MyTuple<Types...>&) {
-    throw std::runtime_error("Not implemented");
-    return 0;
+    return sizeof...(Types);
 }
