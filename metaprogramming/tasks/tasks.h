@@ -34,7 +34,12 @@
 // -----------------------------------------------------------------------------
 template <int Base, unsigned Exp>
 struct Pow {
-    static constexpr int value = 0;  // TODO: реализуйте
+    static constexpr int value = Base * Pow<Base, Exp - 1>::value;  // TODO: реализуйте
+};
+
+template <int Base>
+struct Pow<Base, 0> {
+    static constexpr int value = 1;
 };
 
 // -----------------------------------------------------------------------------
@@ -57,6 +62,16 @@ struct Pow {
 template <typename T>
 struct IsReference {
     static constexpr bool value = false;  // TODO: добавьте специализации
+};
+
+template <typename T>
+struct IsReference<T&> {
+    static constexpr bool value = true;
+};
+
+template <typename T>
+struct IsReference<T&&> {
+    static constexpr bool value = true;
 };
 
 // -----------------------------------------------------------------------------
@@ -82,6 +97,11 @@ struct IsReference {
 template <typename T>
 struct RemoveConst {
     using type = T;  // TODO: добавьте частичную специализацию
+};
+
+template <typename T>
+struct RemoveConst<const T> {
+    using type = T;
 };
 
 template <typename T>
