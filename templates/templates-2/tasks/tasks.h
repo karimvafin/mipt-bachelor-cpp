@@ -257,8 +257,7 @@ struct MyTuple {
 
 // TODO: реализуйте специализацию MyTuple<Head, Tail...>
 // которая хранит Head value и наследуется от MyTuple<Tail...>
-// Раскомментируйте и допишите:
-//
+
 template <typename Head, typename... Tail>
 struct MyTuple<Head, Tail...> : MyTuple<Tail...> {
     Head value;
