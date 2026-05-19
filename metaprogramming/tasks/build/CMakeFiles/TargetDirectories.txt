@@ -1,0 +1,4 @@
+/Users/anastasiagondarenko/Downloads/mipt-bachelor-cpp/metaprogramming/tasks/build/CMakeFiles/metaprogramming_tests.dir
+/Users/anastasiagondarenko/Downloads/mipt-bachelor-cpp/metaprogramming/tasks/build/CMakeFiles/test.dir
+/Users/anastasiagondarenko/Downloads/mipt-bachelor-cpp/metaprogramming/tasks/build/CMakeFiles/edit_cache.dir
+/Users/anastasiagondarenko/Downloads/mipt-bachelor-cpp/metaprogramming/tasks/build/CMakeFiles/rebuild_cache.dir
