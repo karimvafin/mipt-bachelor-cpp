@@ -34,7 +34,7 @@
 // -----------------------------------------------------------------------------
 template <int Base, unsigned Exp>
 struct Pow {
-    static constexpr int value = Base * Pow<Base, Exp - 1>::value;  // TODO: реализуйте
+    static constexpr int value = Base * Pow<Base, Exp - 1>::value;
 };
 
 template <int Base>
@@ -61,7 +61,7 @@ struct Pow<Base, 0> {
 // -----------------------------------------------------------------------------
 template <typename T>
 struct IsReference {
-    static constexpr bool value = false;  // TODO: добавьте специализации
+    static constexpr bool value = false;
 };
 
 template <typename T>
@@ -96,7 +96,7 @@ struct IsReference<T&&> {
 // -----------------------------------------------------------------------------
 template <typename T>
 struct RemoveConst {
-    using type = T;  // TODO: добавьте частичную специализацию
+    using type = T;
 };
 
 template <typename T>
@@ -136,13 +136,20 @@ struct TypeList {};
 //   TypeAtT<2, L> == char
 // -----------------------------------------------------------------------------
 template <std::size_t N, typename List>
-struct TypeAt {
-    using type = void;  // TODO: уберите это и добавьте две специализации
+struct TypeAt;
+
+template <typename Head, typename... Tail>
+struct TypeAt<0, TypeList<Head, Tail...>> {
+    using type = Head;
+};
+
+template <std::size_t N, typename Head, typename... Tail>
+struct TypeAt<N, TypeList<Head, Tail...>> {
+    using type = typename TypeAt<N - 1, TypeList<Tail...>>::type;
 };
 
 template <std::size_t N, typename List>
 using TypeAtT = typename TypeAt<N, List>::type;
-
 // -----------------------------------------------------------------------------
 // Задание 5: Concat и Reverse для TypeList (2.0 балла)
 //
@@ -169,8 +176,11 @@ using TypeAtT = typename TypeAt<N, List>::type;
 // Также определите алиасы ConcatT и ReverseT.
 // -----------------------------------------------------------------------------
 template <typename List1, typename List2>
-struct Concat {
-    using type = TypeList<>;  // TODO
+struct Concat;
+
+template <typename... Xs, typename... Ys>
+struct Concat<TypeList<Xs...>, TypeList<Ys...>> {
+    using type = TypeList<Xs..., Ys...>;
 };
 
 template <typename List1, typename List2>
@@ -178,7 +188,12 @@ using ConcatT = typename Concat<List1, List2>::type;
 
 template <typename List>
 struct Reverse {
-    using type = TypeList<>;  // TODO
+    using type = TypeList<>;
+};
+
+template <typename Head, typename... Tail>
+struct Reverse<TypeList<Head, Tail...>> {
+    using type = ConcatT<typename Reverse<TypeList<Tail...>>::type, TypeList<Head>>;
 };
 
 template <typename List>
